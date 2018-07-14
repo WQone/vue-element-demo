@@ -51,3 +51,21 @@ html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, fo
   padding-bottom: 0.1rem;
   padding-top: 0.1rem;
 }
+ /* 表格头部样式 */
+.tb-bg{
+  background: #ccc!important;
+  color: #585858;
+  text-align: center;
+}
+
+.cardList_body {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+/* 卡片头部样式 */
+.el-card__header{
+  padding: 10px 20px;
+  background: #f2f2f2;
+}

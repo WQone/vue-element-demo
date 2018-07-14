@@ -47,19 +47,56 @@
           <span>入参定义</span>
         </div>
         <div class="text item">
-          <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="date" label="日期" width="180">
+          <el-table :data="tableData" border style="width: 100%" header-cell-class-name="tb-bg">
+            <el-table-column prop="n1" label="修改顺序" width="180">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n1" placeholder="修改顺序"></el-input>
+              </template>
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="180">
+            <el-table-column prop="n2" label="参数名" width="180">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n2" placeholder="参数名"></el-input>
+              </template>
             </el-table-column>
-            <el-table-column prop="address" label="地址">
+            <el-table-column prop="n3" label="参数位置">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n3" placeholder="参数位置"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="n4" label="类型">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n4" placeholder="类型"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="n5" label="必填">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n5" placeholder="必填"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="n6" label="默认值">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n6" placeholder="默认值"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="n7" label="示例">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n7" placeholder="示例"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="n8" label="描述">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.n8" placeholder="描述"></el-input>
+              </template>
             </el-table-column>
           </el-table>
+          <el-button type="primary" style="margin: 10px 0" size="small" icon="el-icon-plus" @click.native.prevent="createNewData">
+            增加一条
+          </el-button>
         </div>
       </el-card>
     </div>
-    <el-button type="info" @click="onSubmit">上一步</el-button>
-    <el-button type="primary" @click="onSubmit">下一步</el-button>
+    <el-button type="info" @click="toBefore">上一步</el-button>
+    <el-button type="primary" @click="toNext">下一步</el-button>
   </div>
 </template>
 
@@ -67,15 +104,7 @@
 export default {
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄',
-      }],
+      tableData: [],
       form: {
         name: '',
         region: '',
@@ -87,6 +116,28 @@ export default {
         desc: '',
       },
     };
+  },
+  methods: {
+    // 新增一条数据
+    createNewData() {
+      const a = {
+        n1: '',
+        n2: '',
+        n3: '',
+        n4: '',
+        n5: '',
+        n6: '',
+        n7: '',
+        n8: '',
+      };
+      this.tableData.push(a);
+    },
+    // 上一步
+    toBefore() {
+    },
+    // 下一步
+    toNext() {
+    },
   },
 };
 </script>

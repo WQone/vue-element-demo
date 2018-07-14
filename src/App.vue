@@ -5,19 +5,41 @@
         <img src="./assets/logo.png" />
         <span>比一比API数据DEMO</span>
       </el-header>
-      <el-main class="main-body">
-        <p class="cardList_title" v-if="$route.path !== '/Create'">外部数据API列表</p>
-        <div class="cardList_body">
+      <el-container>
+        <el-aside style="background: #f9f9f9;width: 200px;">
+          <el-menu :default-openeds="['1']">
+            <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-menu"></i>API数据配置</template>
+              <el-menu-item v-for="(item, index) in menuList" :key="index" :index="item.name" @click="linkPage(item.url)" :class="{ 'is-active': item.url === $route.path }">{{item.name}}</el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-aside>
+        <el-main class="main-body">
           <router-view/>
-        </div>
-      </el-main>
+        </el-main>
+      </el-container>
     </el-container>
+
   </div>
 </template>
 
 <script>
+
+import menu from './utils/menu';
+
 export default {
   name: 'App',
+  data() {
+    return {
+      menuList: menu.menuLists,
+    };
+  },
+  methods: {
+    linkPage(path) {
+      this.$router.push(path);
+    },
+  },
 };
 </script>
 
@@ -29,6 +51,10 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.el-menu {
+  background: #f9f9f9;
+}
+
 </style>
 <style scoped>
 .header {
@@ -50,14 +76,6 @@ export default {
 }
 .main-body {
   width: 80%;
-  margin: 20px auto;
-  overflow-x: hidden;
-}
-
-.cardList_body {
-  width: 100%;
-  overflow: hidden;
-  padding: 0 20px;
+  margin: auto;
 }
 </style>
-

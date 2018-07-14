@@ -1,18 +1,15 @@
 <template>
   <div>
-    <p class="cardList_title">外部数据API列表</p>
+    <p class="cardList_title">对账管理</p>
     <div class="cardList_body">
-      <ul>
-        <li class="cardList_body_list" v-for="(item, index) in typeArr" :key="index" @click="changeType(index)" :class="{ 'cardList_body_list_avtive': index === typeActive }">{{item}}</li>
-      </ul>
       <div class="middle">
         <div class="middle-search">
-          <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
+          <el-input placeholder="请输入厂商名称进行查找（支持模糊查询）" v-model="searchVal">
             <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
           </el-input>
         </div>
         <div class="middle-btn">
-          <el-button type="primary" @click="toCreatePage">创建API</el-button>
+          <el-button type="primary" @click="outData">数据导出</el-button>
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
@@ -94,27 +91,15 @@ export default {
       }, 500);
       console.log(this.searchVal);
     },
-    // 创建API
-    toCreatePage() {
-      this.$router.push({ path: '/Create' });
+    // 数据导出
+    outData() {
+      console.log('数据导出');
     },
   },
 };
 </script>
 
 <style scoped>
-ul {
-  float: left;
-  padding: 5px 0 5px 0;
-}
-.cardList_body_list {
-  float: left;
-  padding: 7px 15px;
-  background: #ccc;
-  color: black;
-  margin-right: 18px;
-  margin-bottom: 18px;
-}
 .middle {
   overflow: hidden;
   display: block;
@@ -132,9 +117,4 @@ ul {
   float: right;
   padding: 20px 0;
 }
-.cardList_body_list_avtive {
-  background: green;
-  color: white;
-}
 </style>
-
