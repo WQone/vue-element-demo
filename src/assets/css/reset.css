@@ -66,6 +66,35 @@ html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, fo
 
 /* 卡片头部样式 */
 .el-card__header{
-  padding: 10px 20px;
+  padding: 10px 10px;
   background: #f2f2f2;
+}
+.el-card__header i{
+  margin-right: 5px;
+}
+ /* 表单样式 */
+.el-step__title {
+  min-width: 55% !important;
+}
+.el-form-item {
+  width: 500px;
+}
+.create-body .el-select {
+  width: 370px;
+}
+.el-card__body {
+  padding: 0;
+}
+ .create-body {
+  margin: 20px 0;
+  text-align: left;
+}
+.card-body {
+  margin: auto;
+  margin-top: 20px;
+  max-width: 600px;
+}
+.btn {
+  max-width: 600px;
+  margin: auto;
 }

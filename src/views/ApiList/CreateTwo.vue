@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-steps :active="1" simple>
+    <el-steps :active="1" simple finish-status="success">
       <el-step title="基本信息"></el-step>
       <el-step title="定义API请求"></el-step>
       <el-step title="定义API后端服务"></el-step>
@@ -9,32 +9,33 @@
     <div class="create-body">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
-          <span>名称及描述</span>
+          <i class="el-icon-edit"></i>
+          <span>请求基础定义</span>
         </div>
         <div class="text item card-body">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="协议">
-              <el-checkbox-group v-model="form.type">
+              <el-checkbox-group v-model="form.b1">
                 <el-checkbox label="http" name="type"></el-checkbox>
                 <el-checkbox label="https" name="type"></el-checkbox>
                 <el-checkbox label="webSocket" name="type"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
             <el-form-item label="请求地址">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.b2"></el-input>
             </el-form-item>
             <el-form-item label="请求Path">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.b3"></el-input>
               <p>请求Path必须包含请求参数中的Parameter Path,包含在[]中</p>
             </el-form-item>
             <el-form-item label="Http Method">
-              <el-select v-model="form.region" placeholder="请选择Http Method">
+              <el-select v-model="form.b4" placeholder="请选择Http Method">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="入参请求模式">
-              <el-select v-model="form.region" placeholder="请选择入参请求模式">
+              <el-select v-model="form.b5" placeholder="请选择入参请求模式">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
@@ -44,10 +45,11 @@
       </el-card>
       <el-card class="box-card" shadow="never" style="margin-top:15px;">
         <div slot="header" class="clearfix">
+          <i class="el-icon-edit"></i>
           <span>入参定义</span>
         </div>
         <div class="text item">
-          <el-table :data="tableData" border style="width: 100%" header-cell-class-name="tb-bg">
+          <el-table :data="form.tableData" border style="width: 100%" header-cell-class-name="tb-bg">
             <el-table-column prop="n1" label="修改顺序" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.n1" placeholder="修改顺序"></el-input>
@@ -102,18 +104,15 @@
 
 <script>
 export default {
+  mounted() {
+    console.log(77, this.$store.state.view.form1);
+    this.form = this.$store.state.view.form2;
+  },
   data() {
     return {
-      tableData: [],
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        b1: [],
+        tableData: [],
       },
     };
   },
@@ -130,39 +129,18 @@ export default {
         n7: '',
         n8: '',
       };
-      this.tableData.push(a);
+      this.form.tableData.push(a);
     },
     // 上一步
     toBefore() {
+      this.$router.push({ path: '/CreateOne' });
     },
     // 下一步
     toNext() {
+      this.$store.commit('form2', this.form); // 第一步
+      console.log(this.form);
+      this.$router.push({ path: '/CreateThree' });
     },
   },
 };
 </script>
-
-<style>
-.el-step__title {
-  min-width: 55% !important;
-}
-.el-form-item {
-  width: 500px;
-}
-.el-select {
-  width: 370px;
-}
-.el-card__body {
-  padding: 0;
-}
-</style>
-<style scoped>
-.create-body {
-  margin: 20px 0;
-  text-align: left;
-}
-.card-body {
-  margin: auto;
-  width: 60%;
-}
-</style>

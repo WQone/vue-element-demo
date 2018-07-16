@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-container style="height: 80%;">
+    <el-container style="height: 100%;">
       <el-header style="" class="header">
         <img src="./assets/logo.png" />
         <span>比一比API数据DEMO</span>
@@ -50,11 +50,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
 }
 .el-menu {
   background: #f9f9f9;
 }
-
 </style>
 <style scoped>
 .header {
@@ -76,6 +79,6 @@ export default {
 }
 .main-body {
   width: 80%;
-  margin: auto;
+  /* overflow: hidden; */
 }
 </style>

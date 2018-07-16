@@ -1,28 +1,46 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Basic from '@/views/Basic';
-import Create from '@/views/Basic/Create';
+import ApiList from '@/views/ApiList';
+import CreateOne from '@/views/ApiList/CreateOne';
+import CreateTwo from '@/views/ApiList/CreateTwo';
+import CreateThree from '@/views/ApiList/CreateThree';
+import CreateFour from '@/views/ApiList/CreateFour';
 import Account from '@/views/Account';
 import Charging from '@/views/Charging';
 
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
-      name: 'Basic',
-      component: Basic,
+      redirect: '/ApiList',
     },
     {
-      path: '/Basic',
-      name: 'Basic',
-      component: Basic,
+      path: '/ApiList',
+      name: 'ApiList',
+      component: ApiList,
     },
     {
-      path: '/Create',
-      name: 'Create',
-      component: Create,
+      path: '/CreateOne',
+      name: 'CreateOne',
+      component: CreateOne,
+    },
+    {
+      path: '/CreateTwo',
+      name: 'CreateTwo',
+      component: CreateTwo,
+    },
+    {
+      path: '/CreateThree',
+      name: 'CreateThree',
+      component: CreateThree,
+    },
+    {
+      path: '/CreateFour',
+      name: 'CreateFour',
+      component: CreateFour,
     },
     {
       path: '/Account',

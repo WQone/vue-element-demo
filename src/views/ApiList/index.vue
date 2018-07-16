@@ -36,6 +36,13 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-dialog title="详情" :visible.sync="centerDialogVisible" width="30%" center>
+        <span>XXXXXXXXXXXXXXXXXXXXX</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
       <div class="block">
         <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="1000">
         </el-pagination>
@@ -56,6 +63,7 @@ export default {
       zip: 200333,
     };
     return {
+      centerDialogVisible: false,
       loading: false,
       searchVal: null,
       currentPage: 1,
@@ -75,6 +83,7 @@ export default {
     },
     // 查看详情
     toItem(index, data) {
+      this.centerDialogVisible = true;
       console.log(index, data);
     },
     // 点击数据类型
@@ -96,7 +105,7 @@ export default {
     },
     // 创建API
     toCreatePage() {
-      this.$router.push({ path: '/Create' });
+      this.$router.push({ path: '/CreateOne' });
     },
   },
 };

@@ -13,21 +13,21 @@
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
-        <el-table-column prop="date" label="API名称" header-align="center">
+        <el-table-column prop="name" label="厂商" header-align="center">
         </el-table-column>
-        <el-table-column prop="name" label="类型" header-align="center">
+        <el-table-column prop="date" label="API名称" header-align="center">
         </el-table-column>
         <el-table-column prop="province" label="分组" header-align="center">
         </el-table-column>
-        <el-table-column prop="city" label="描述" header-align="center">
+        <el-table-column prop="city" label="已使用金额" header-align="center">
         </el-table-column>
-        <el-table-column prop="address" label="最后修改" header-align="center">
+        <el-table-column prop="address" label="已开通时间" header-align="center">
         </el-table-column>
-        <el-table-column prop="zip" label="厂商名称" header-align="center">
+        <el-table-column prop="zip" label="到期时间" header-align="center">
         </el-table-column>
         <el-table-column label="操作" header-align="center">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="toItem(scope.$index, tableData)" type="text" size="small">
+            <el-button @click.native.prevent="toItem(scope.$index)" type="text" size="small">
               查看详情
             </el-button>
           </template>
