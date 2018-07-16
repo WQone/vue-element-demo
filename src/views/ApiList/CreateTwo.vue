@@ -6,7 +6,7 @@
       <el-step title="定义API后端服务"></el-step>
       <el-step title="定义返回结果"></el-step>
     </el-steps>
-    <div class="create-body">
+    <div class="create-body" :style="formHeight">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <i class="el-icon-edit"></i>
@@ -97,19 +97,27 @@
         </div>
       </el-card>
     </div>
+    <div class="btn">
     <el-button type="info" @click="toBefore">上一步</el-button>
     <el-button type="primary" @click="toNext">下一步</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  created() {
+    this.tableHeightRun();
+    window.onresize = () => {
+      this.tableHeightRun();
+    };
+  },
   mounted() {
-    console.log(77, this.$store.state.view.form1);
     this.form = this.$store.state.view.form2;
   },
   data() {
     return {
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
         b1: [],
         tableData: [],
@@ -140,6 +148,13 @@ export default {
       this.$store.commit('form2', this.form); // 第一步
       console.log(this.form);
       this.$router.push({ path: '/CreateThree' });
+    },
+    //  计算表格高度
+    tableHeightRun() {
+      const tableHeightFun = () => {
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
+      };
+      setTimeout(tableHeightFun, 0);
     },
   },
 };

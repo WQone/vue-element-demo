@@ -79,6 +79,6 @@ export default {
 }
 .main-body {
   width: 80%;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 </style>

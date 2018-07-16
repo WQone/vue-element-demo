@@ -88,6 +88,12 @@ html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, fo
  .create-body {
   margin: 20px 0;
   text-align: left;
+  border:1px solid #f2f2f2;
+  overflow-y:auto;
+}
+.create-body .el-card{
+  border: none;
+  border-radius: 0px;
 }
 .card-body {
   margin: auto;

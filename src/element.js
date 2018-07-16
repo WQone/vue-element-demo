@@ -69,6 +69,10 @@ import {
   Notification,
 } from 'element-ui';
 
+import tableCustom from './utils/tableCustom'; //  表格自定义事件
+
+window.tableCustom = tableCustom;
+
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Autocomplete);

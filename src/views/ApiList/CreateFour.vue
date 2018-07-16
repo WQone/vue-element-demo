@@ -6,7 +6,7 @@
       <el-step title="定义API后端服务"></el-step>
       <el-step title="定义返回结果"></el-step>
     </el-steps>
-    <div class="create-body">
+    <div class="create-body"  :style="formHeight">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <i class="el-icon-edit"></i>
@@ -76,12 +76,19 @@
 import { mapActions } from 'vuex';
 
 export default {
+  created() {
+    this.tableHeightRun();
+    window.onresize = () => {
+      this.tableHeightRun();
+    };
+  },
   mounted() {
     console.log(77, this.$store.state.view.form4);
     this.form = this.$store.state.view.form4;
   },
   data() {
     return {
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
         tableData: [],
       },
@@ -120,6 +127,13 @@ export default {
       });
       console.log(this.form);
       this.$router.push({ path: '/ApiList' });
+    },
+    //  计算表格高度
+    tableHeightRun() {
+      const tableHeightFun = () => {
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
+      };
+      setTimeout(tableHeightFun, 0);
     },
   },
 };

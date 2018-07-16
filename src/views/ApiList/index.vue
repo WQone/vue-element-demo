@@ -2,7 +2,7 @@
   <div>
     <p class="cardList_title">外部数据API列表</p>
     <div class="cardList_body">
-      <ul>
+      <ul class="cardList_ul">
         <li class="cardList_body_list" v-for="(item, index) in typeArr" :key="index" @click="changeType(index)" :class="{ 'cardList_body_list_avtive': index === typeActive }">{{item}}</li>
       </ul>
       <div class="middle">
@@ -11,11 +11,11 @@
             <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
           </el-input>
         </div>
-        <div class="middle-btn">
+        <!-- <div class="middle-btn">
           <el-button type="primary" @click="toCreatePage">创建API</el-button>
-        </div>
+        </div> -->
       </div>
-      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
+      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
         <el-table-column prop="date" label="API名称" header-align="center">
         </el-table-column>
         <el-table-column prop="name" label="类型" header-align="center">
@@ -43,9 +43,14 @@
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-      <div class="block">
-        <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="1000">
-        </el-pagination>
+      <div class="paging">
+        <div class="page_left">
+          <el-button type="primary" @click="toCreatePage">创建API</el-button>
+        </div>
+        <div class="block page_right">
+          <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="100">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -53,6 +58,12 @@
 
 <script>
 export default {
+  created() {
+    this.tableHeightRun();
+    window.onresize = () => {
+      this.tableHeightRun();
+    };
+  },
   data() {
     const item = {
       date: '2016-05-02',
@@ -63,11 +74,12 @@ export default {
       zip: 200333,
     };
     return {
+      tableHeight: 0, // 表格高度
       centerDialogVisible: false,
       loading: false,
       searchVal: null,
       currentPage: 1,
-      tableData: Array(5).fill(item),
+      tableData: Array(10).fill(item),
       typeArr: ['工商数据', '司法数据', '经营数据', '税务数据', '企业年报', '项目信息', '知识产权', '招投标（采购）', '税务数据', '业务流水', '征信数据', '其他数据'],
       typeActive: 0,
     };
@@ -107,6 +119,13 @@ export default {
     toCreatePage() {
       this.$router.push({ path: '/CreateOne' });
     },
+    //  计算表格高度
+    tableHeightRun() {
+      const tableHeightFun = () => {
+        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.cardList_ul', '.paging', 145]);
+      };
+      setTimeout(tableHeightFun, 0);
+    },
   },
 };
 </script>
@@ -134,9 +153,9 @@ ul {
   width: 400px;
   float: left;
 }
-.middle-btn {
+/* .middle-btn {
   float: right;
-}
+} */
 .block {
   float: right;
   padding: 20px 0;
@@ -144,6 +163,23 @@ ul {
 .cardList_body_list_avtive {
   background: green;
   color: white;
+}
+.paging {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  line-height: 72px;
+}
+
+.page_left {
+  float: left;
+}
+.page_right {
+  float: right;
 }
 </style>
 
