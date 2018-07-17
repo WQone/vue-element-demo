@@ -2,8 +2,8 @@
   <div id="app">
     <el-container style="height: 100%;">
       <el-header style="" class="header">
-        <img src="./assets/logo.png" />
-        <span>比一比API数据DEMO</span>
+        <!-- <img src="./assets/logo.png" /> -->
+        <span>API数据DEMO</span>
       </el-header>
       <el-container>
         <el-aside style="background: #f9f9f9;width: 200px;">
@@ -69,7 +69,7 @@ export default {
   font-size: 14px;
 }
 .header span {
-  margin-left: 30px;
+  /* margin-left: 30px; */
   font-size: 20px;
   color: #ffffff;
   vertical-align: middle;

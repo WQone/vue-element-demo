@@ -4,34 +4,44 @@
     <div class="cardList_body">
       <div class="middle">
         <div class="middle-search">
-          <el-col :span="12" :lg="6">
-            <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
-              <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
-            </el-input>
-          </el-col>
-          <el-col :span="12" :lg="6">
-            <div class="searchDiv">
-              <span class="searchLabel">分组</span>
-              <div class="searchInput">
-                <el-select v-model="value" placeholder="请选择">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
+          <el-row>
+            <el-col :span="10" :lg="8">
+              <div class="searchDiv">
+                <span class="searchLabel">名称</span>
+                <div class="searchInput">
+                  <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
+                    <!-- <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button> -->
+                  </el-input>
+                </div>
               </div>
-            </div>
-          </el-col>
-          <el-col :span="12" :lg="6">
-            <div class="searchDiv">
-              <span class="searchLabel">时间区间</span>
-              <div class="searchInput">
-                <el-date-picker v-model="value6" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+            </el-col>
+            <el-col :span="10" :lg="8">
+              <div class="searchDiv">
+                <span class="searchLabel">分组</span>
+                <div class="searchInput">
+                  <el-select v-model="value" placeholder="请选择">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </div>
               </div>
-            </div>
-          </el-col>
+            </el-col>
+            <el-col :span="10" :lg="8">
+              <div class="searchDiv">
+                <span class="searchLabel">时间区间</span>
+                <div class="searchInput">
+                  <el-date-picker v-model="value6" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                  </el-date-picker>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="middle-btn">
+          <el-button type="primary" icon="el-icon-search" @click="toSearch"></el-button>
         </div>
       </div>
-      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
+      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
         <el-table-column prop="date" label="API名称" header-align="center">
         </el-table-column>
         <el-table-column prop="province" label="分组" header-align="center">
@@ -52,9 +62,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block">
-        <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="1000">
-        </el-pagination>
+      <div class="paging">
+        <div class="block page_right">
+          <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="100">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +74,12 @@
 
 <script>
 export default {
+  created() {
+    this.tableHeightRun();
+    window.onresize = () => {
+      this.tableHeightRun();
+    };
+  },
   data() {
     const item = {
       date: '2016-05-02',
@@ -72,6 +90,7 @@ export default {
       zip: 200333,
     };
     return {
+      tableHeight: 0, // 表格高度
       loading: false,
       searchVal: null,
       currentPage: 1,
@@ -128,6 +147,13 @@ export default {
       }, 500);
       console.log(this.searchVal);
     },
+    //  计算表格高度
+    tableHeightRun() {
+      const tableHeightFun = () => {
+        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.paging', 135]);
+      };
+      setTimeout(tableHeightFun, 0);
+    },
   },
 };
 </script>
@@ -138,12 +164,18 @@ export default {
   display: block;
   width: 100%;
   padding: 10px 0 5px 0;
+  position: relative;
 }
 .middle-search {
   float: left;
 }
 .middle-btn {
   float: right;
+  position: absolute;
+  right: 15px;
+}
+.middle-btn button {
+  font-weight: bolder;
 }
 .block {
   float: right;
@@ -156,16 +188,23 @@ export default {
 .searchLabel {
   position: absolute;
   text-align: right;
-  width: 80px;
+  width: 65px;
   line-height: 40px;
   top: 0;
   left: 0;
   box-sizing: border-box;
+  font-size: 14px;
 }
 .searchInput {
   position: relative;
   width: 100%;
-  padding-left: 90px;
+  padding-left: 75px;
   box-sizing: border-box;
+}
+.searchInput .el-select {
+  display: block;
+}
+.searchInput .el-date-editor--daterange.el-input__inner {
+  width: 100%;
 }
 </style>

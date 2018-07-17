@@ -53,8 +53,8 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button @click.native.prevent="toItem(scope.$index, tableData)" type="text" size="small">
-                  查看
+                <el-button @click.native.prevent="deleteData(scope.$index)" type="text" size="small">
+                  删除
                 </el-button>
               </template>
             </el-table-column>
@@ -83,21 +83,25 @@ export default {
     };
   },
   mounted() {
-    console.log(77, this.$store.state.view.form4);
-    this.form = this.$store.state.view.form4;
+    this.getLocal();
   },
   data() {
     return {
-      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
       form: {
         tableData: [],
       },
     };
   },
   methods: {
-    ...mapActions([
-      'ClearForm',
-    ]),
+    // 获取本地存储数据
+    getLocal() {
+      const base = window.sessionStorage.getItem('form4');
+      if (base && base !== '{}') {
+        this.form = this.convert.getJSON(base);
+        console.log(787, this.form);
+      }
+    },
     // 新增一条数据
     createNewData() {
       const a = {
@@ -112,14 +116,19 @@ export default {
       };
       this.form.tableData.push(a);
     },
+    // 删除该行数据
+    deleteData(index) {
+      this.form.tableData.splice(index, 1);
+      console.log(index, this.form.tableData);
+    },
     // 上一步
     toBefore() {
+      window.sessionStorage.setItem('form4', JSON.stringify(this.form));
       this.$router.push({ path: '/CreateThree' });
     },
     // 创建
     toNext() {
-      this.ClearForm();
-      this.$store.commit('form4', this.form); // 第一步
+      window.sessionStorage.clear();
       this.$message({
         showClose: true,
         message: '创建成功',
@@ -131,7 +140,7 @@ export default {
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },

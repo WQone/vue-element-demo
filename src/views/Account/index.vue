@@ -8,11 +8,8 @@
             <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
           </el-input>
         </div>
-        <div class="middle-btn">
-          <el-button type="primary" @click="outData">数据导出</el-button>
-        </div>
       </div>
-      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
+      <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
         <el-table-column prop="name" label="厂商" header-align="center">
         </el-table-column>
         <el-table-column prop="date" label="API名称" header-align="center">
@@ -33,9 +30,14 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block">
-        <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="1000">
-        </el-pagination>
+      <div class="paging">
+        <div class="page_left">
+          <el-button type="primary" @click="outData">数据导出</el-button>
+        </div>
+        <div class="block page_right">
+          <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="100">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -43,6 +45,12 @@
 
 <script>
 export default {
+  created() {
+    this.tableHeightRun();
+    window.onresize = () => {
+      this.tableHeightRun();
+    };
+  },
   data() {
     const item = {
       date: '2016-05-02',
@@ -53,6 +61,7 @@ export default {
       zip: 200333,
     };
     return {
+      tableHeight: 0, // 表格高度
       loading: false,
       searchVal: null,
       currentPage: 1,
@@ -94,6 +103,13 @@ export default {
     // 数据导出
     outData() {
       console.log('数据导出');
+    },
+    //  计算表格高度
+    tableHeightRun() {
+      const tableHeightFun = () => {
+        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.paging', 135]);
+      };
+      setTimeout(tableHeightFun, 0);
     },
   },
 };

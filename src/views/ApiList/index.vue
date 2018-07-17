@@ -11,11 +11,10 @@
             <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
           </el-input>
         </div>
-        <!-- <div class="middle-btn">
-          <el-button type="primary" @click="toCreatePage">创建API</el-button>
-        </div> -->
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
+        <el-table-column prop="num" label="#" header-align="center" width="55">
+        </el-table-column>
         <el-table-column prop="date" label="API名称" header-align="center">
         </el-table-column>
         <el-table-column prop="name" label="类型" header-align="center">
@@ -30,25 +29,18 @@
         </el-table-column>
         <el-table-column label="操作" header-align="center">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="toItem(scope.$index, tableData)" type="text" size="small">
+            <el-button @click.native.prevent="toItem(scope.$index)" type="text" size="small">
               查看详情
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-dialog title="详情" :visible.sync="centerDialogVisible" width="30%" center>
-        <span>XXXXXXXXXXXXXXXXXXXXX</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
       <div class="paging">
         <div class="page_left">
           <el-button type="primary" @click="toCreatePage">创建API</el-button>
         </div>
         <div class="block page_right">
-          <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="100">
+          <el-pagination @current-change="CurrentChange" :page-size="size" layout="total, prev, pager, next" :total="total">
           </el-pagination>
         </div>
       </div>
@@ -64,56 +56,68 @@ export default {
       this.tableHeightRun();
     };
   },
+  mounted() {
+    this.dataList();
+  },
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      province: '上海',
-      city: '普陀区',
-      address: '上海市普陀',
-      zip: 200333,
-    };
     return {
       tableHeight: 0, // 表格高度
-      centerDialogVisible: false,
       loading: false,
       searchVal: null,
-      currentPage: 1,
-      tableData: Array(10).fill(item),
+      tableData: [],
       typeArr: ['工商数据', '司法数据', '经营数据', '税务数据', '企业年报', '项目信息', '知识产权', '招投标（采购）', '税务数据', '业务流水', '征信数据', '其他数据'],
       typeActive: 0,
+      page: 0,
+      size: 5,
+      total: 0,
     };
   },
   methods: {
-    // 当前页改变
-    CurrentChange(val) {
+    // 获取列表
+    dataList(page, size, filterForm) {
       this.loading = true;
+      if (page !== undefined) this.page = page;
+      if (size !== undefined) this.size = size;
+      const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀',
+        zip: 200333,
+      };
+      this.tableData = [];
+      for (let i = 0; i < 5; i += 1) {
+        this.tableData.push({
+          ...item,
+          num: (i + 1) + (this.page * this.size),
+        });
+      }
+      this.total = this.tableData.length;
       setTimeout(() => {
         this.loading = false;
+        console.log(page, size, filterForm);
       }, 500);
+    },
+    // 当前页改变
+    CurrentChange(val) {
+      this.dataList(val);
       console.log(`当前页: ${val}`);
     },
     // 查看详情
     toItem(index, data) {
-      this.centerDialogVisible = true;
+      this.$router.push({ path: '/ApiList/Item' });
       console.log(index, data);
     },
     // 点击数据类型
     changeType(index) {
       this.typeActive = index;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
+      this.dataList();
       console.log(index);
     },
     // 点击搜索
     toSearch() {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      console.log(this.searchVal);
+      this.dataList(this.page, this.size, this.searchVal);
     },
     // 创建API
     toCreatePage() {
@@ -122,7 +126,7 @@ export default {
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.cardList_ul', '.paging', 145]);
+        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.cardList_ul', '.paging', 135]);
       };
       setTimeout(tableHeightFun, 0);
     },
@@ -133,7 +137,7 @@ export default {
 <style scoped>
 ul {
   float: left;
-  padding: 5px 0 5px 0;
+  padding: 5px 0 0 0;
 }
 .cardList_body_list {
   float: left;
@@ -163,23 +167,6 @@ ul {
 .cardList_body_list_avtive {
   background: green;
   color: white;
-}
-.paging {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  overflow: hidden;
-  background-color: #fff;
-  line-height: 72px;
-}
-
-.page_left {
-  float: left;
-}
-.page_right {
-  float: right;
 }
 </style>
 

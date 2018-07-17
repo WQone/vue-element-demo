@@ -70,8 +70,11 @@ import {
 } from 'element-ui';
 
 import tableCustom from './utils/tableCustom'; //  表格自定义事件
+import convert from './utils/convert'; //  转换
 
 window.tableCustom = tableCustom;
+
+Vue.prototype.convert = convert;
 
 Vue.use(Pagination);
 Vue.use(Dialog);

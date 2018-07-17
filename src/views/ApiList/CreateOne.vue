@@ -86,26 +86,32 @@ export default {
     };
   },
   mounted() {
-    console.log(77, this.$store.state.view.form1);
-    this.form = this.$store.state.view.form1;
+    this.getLocal();
   },
   data() {
     return {
-      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
       form: {},
     };
   },
   methods: {
+    // 获取本地存储数据
+    getLocal() {
+      const base = window.sessionStorage.getItem('form1');
+      if (base && base !== '{}') {
+        this.form = this.convert.getJSON(base);
+        console.log(787, this.form);
+      }
+    },
     // 下一步
     toNext() {
-      this.$store.commit('form1', this.form); // 第一步
+      window.sessionStorage.setItem('form1', JSON.stringify(this.form));
       this.$router.push({ path: '/CreateTwo' });
-      console.log(this.form, this.$store.state.view.form1);
     },
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },

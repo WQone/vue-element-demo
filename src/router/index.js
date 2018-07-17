@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import ApiList from '@/views/ApiList';
+import Item from '@/views/ApiList/Item';
 import CreateOne from '@/views/ApiList/CreateOne';
 import CreateTwo from '@/views/ApiList/CreateTwo';
 import CreateThree from '@/views/ApiList/CreateThree';
@@ -21,6 +22,11 @@ export default new Router({
       path: '/ApiList',
       name: 'ApiList',
       component: ApiList,
+    },
+    {
+      path: '/ApiList/Item',
+      name: 'Item',
+      component: Item,
     },
     {
       path: '/CreateOne',
