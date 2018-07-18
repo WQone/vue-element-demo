@@ -30,7 +30,7 @@
               <div class="searchDiv">
                 <span class="searchLabel">时间区间</span>
                 <div class="searchInput">
-                  <el-date-picker v-model="value6" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                  <el-date-picker v-model="dateValue" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                   </el-date-picker>
                 </div>
               </div>
@@ -77,6 +77,14 @@ export default {
   created() {
     this.tableHeightRun();
     window.onresize = () => {
+      const docWidth = document.body.clientWidth;
+      const mainBody = document.getElementsByClassName('main-body');
+      if (docWidth > 1180 && docWidth < 1400) {
+        mainBody[0].style.minWidth = '1200px';
+      } else {
+        mainBody[0].removeAttribute('style');
+      }
+      // console.log(document.body.clientWidth);
       this.tableHeightRun();
     };
   },
@@ -114,7 +122,7 @@ export default {
         label: '北京烤鸭',
       }],
       value: '',
-      value6: '',
+      dateValue: '',
     };
   },
   methods: {
@@ -141,6 +149,8 @@ export default {
     },
     // 点击搜索
     toSearch() {
+      this.dateValue = this.dateValue ? `${this.convert.convertDateOther(this.dateValue[0])}-${this.convert.convertDateOther(this.dateValue[1])}` : '';
+      console.log(this.dateValue);
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
@@ -176,6 +186,9 @@ export default {
 }
 .middle-btn button {
   font-weight: bolder;
+  color: #909399;
+  background-color: #f5f7fa;
+  border-color: #dcdfe6;
 }
 .block {
   float: right;

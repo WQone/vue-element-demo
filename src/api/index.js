@@ -5,13 +5,12 @@
  */
 
 import axios from 'axios';
+import { Message } from 'element-ui';
 
 const instance = axios.create({
-  baseURL: 'www.baidu.com',
+  baseURL: 'http://localhost:8080/api/',
   withCredentials: true,
-  params: {
-    access_token: 'abcdefg',
-  },
+  params: {},
 });
 
 instance.interceptors.request.use((request) => {
@@ -19,7 +18,6 @@ instance.interceptors.request.use((request) => {
     ...request,
     params: {
       ...request.params,
-      access_token: 'abcdefg',
     },
   };
   return axiosRequest;
@@ -27,17 +25,16 @@ instance.interceptors.request.use((request) => {
 
 instance.interceptors.response.use(
   (response) => {
-    if (response.data.code !== 0 && response.data.code !== 20000 && response.data.code !== 401) {
+    if (
+      response.data.code !== '0' &&
+      response.data.code !== '20000' &&
+      response.data.code !== '401'
+    ) {
+      Message({
+        message: response.data.message,
+        type: 'warning',
+      });
       console.log(response.data.message);
-    }
-    if (response.data.code === 401) {
-      console.log('登录信息已失效，请重新登录');
-    }
-    if (response.data.code === 403) {
-      window.location.hash = '#/403';
-    }
-    if (response.data.code === 20000) {
-      console.log('错误');
     }
     return response;
   },

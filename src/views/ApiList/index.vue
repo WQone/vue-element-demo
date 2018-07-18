@@ -3,7 +3,7 @@
     <p class="cardList_title">外部数据API列表</p>
     <div class="cardList_body">
       <ul class="cardList_ul">
-        <li class="cardList_body_list" v-for="(item, index) in typeArr" :key="index" @click="changeType(index)" :class="{ 'cardList_body_list_avtive': index === typeActive }">{{item}}</li>
+        <li class="cardList_body_list" v-for="(item, index) in typeArr" :key="index" @click="changeType(item.id)" :class="{ 'cardList_body_list_avtive': item.id === typeActive }">{{item.name}}</li>
       </ul>
       <div class="middle">
         <div class="middle-search">
@@ -15,21 +15,21 @@
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
         <el-table-column prop="num" label="#" header-align="center" width="55">
         </el-table-column>
-        <el-table-column prop="date" label="API名称" header-align="center">
+        <el-table-column prop="apiName" label="API名称" header-align="center">
         </el-table-column>
-        <el-table-column prop="name" label="类型" header-align="center">
+        <el-table-column prop="accessType" label="类型" header-align="center">
         </el-table-column>
-        <el-table-column prop="province" label="分组" header-align="center">
+        <el-table-column prop="groupId" label="分组" header-align="center">
         </el-table-column>
-        <el-table-column prop="city" label="描述" header-align="center">
+        <el-table-column prop="description" label="描述" header-align="center">
         </el-table-column>
-        <el-table-column prop="address" label="最后修改" header-align="center">
+        <el-table-column prop="createdTime" label="最后修改" header-align="center" min-width='100'>
         </el-table-column>
-        <el-table-column prop="zip" label="厂商名称" header-align="center">
+        <el-table-column prop="factoryName" label="厂商名称" header-align="center">
         </el-table-column>
         <el-table-column label="操作" header-align="center">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="toItem(scope.$index)" type="text" size="small">
+            <el-button @click.native.prevent="toItem(scope.row.apiId)" type="text" size="small">
               查看详情
             </el-button>
           </template>
@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import baseApi from '../../api/base';
+import menu from '../../utils/menu';
+
 export default {
   created() {
     this.tableHeightRun();
@@ -65,8 +68,8 @@ export default {
       loading: false,
       searchVal: null,
       tableData: [],
-      typeArr: ['工商数据', '司法数据', '经营数据', '税务数据', '企业年报', '项目信息', '知识产权', '招投标（采购）', '税务数据', '业务流水', '征信数据', '其他数据'],
-      typeActive: 0,
+      typeArr: menu.typeArr,
+      typeActive: 1,
       page: 0,
       size: 5,
       total: 0,
@@ -78,26 +81,21 @@ export default {
       this.loading = true;
       if (page !== undefined) this.page = page;
       if (size !== undefined) this.size = size;
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀',
-        zip: 200333,
-      };
-      this.tableData = [];
-      for (let i = 0; i < 5; i += 1) {
-        this.tableData.push({
-          ...item,
-          num: (i + 1) + (this.page * this.size),
-        });
-      }
-      this.total = this.tableData.length;
-      setTimeout(() => {
+      baseApi.apiFind(this.typeActive, this.searchVal).then((res) => {
+        if (res.data.code === '0') {
+          const data = res.data.data;
+          for (let i = 0; i < data.length; i += 1) {
+            data[i].num = (i + 1) + (this.page * this.size);
+            data[i].createdTime = data[i].createdTime ? this.convert.formatDate(data[i].createdTime) : '';
+            const arr = menu.typeArr.filter((item) => item.id === data[i].groupId);
+            data[i].groupId = arr[0].name;
+          }
+          this.tableData = data;
+          this.total = this.tableData.length;
+        }
         this.loading = false;
         console.log(page, size, filterForm);
-      }, 500);
+      });
     },
     // 当前页改变
     CurrentChange(val) {
@@ -105,9 +103,8 @@ export default {
       console.log(`当前页: ${val}`);
     },
     // 查看详情
-    toItem(index, data) {
-      this.$router.push({ path: '/ApiList/Item' });
-      console.log(index, data);
+    toItem(id) {
+      this.$router.push({ path: '/ApiList/Item', query: { id } });
     },
     // 点击数据类型
     changeType(index) {

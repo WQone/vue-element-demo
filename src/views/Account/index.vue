@@ -22,13 +22,6 @@
         </el-table-column>
         <el-table-column prop="zip" label="到期时间" header-align="center">
         </el-table-column>
-        <el-table-column label="操作" header-align="center">
-          <template slot-scope="scope">
-            <el-button @click.native.prevent="toItem(scope.$index)" type="text" size="small">
-              查看详情
-            </el-button>
-          </template>
-        </el-table-column>
       </el-table>
       <div class="paging">
         <div class="page_left">

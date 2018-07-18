@@ -15,33 +15,39 @@
         <div class="text item card-body">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="后端服务类型">
-              <el-radio-group v-model="form.c1">
+              <el-radio-group v-model="form.protocol">
                 <el-radio label="Http/Https"></el-radio>
                 <el-radio label="函数计算"></el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="后端服务地址">
-              <el-input v-model="form.c2"></el-input>
+              <el-input v-model="form.address"></el-input>
               <p>后端服务地址指API网关调用底层服务器时的域名或者IP，不包含Path</p>
             </el-form-item>
             <el-form-item label="后端请求Path">
-              <el-input v-model="form.c3"></el-input>
+              <el-input v-model="form.path"></el-input>
             </el-form-item>
             <el-form-item label="Http Method">
-              <el-select v-model="form.c4" placeholder="请选择Http Method">
-                <el-option label="Post" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="form.httpMethod" placeholder="请选择Http Method">
+                <el-option value="GET"></el-option>
+                <el-option value="POST"></el-option>
+                <el-option value="PATCH"></el-option>
+                <el-option value="PUT"></el-option>
+                <el-option value="DELETE"></el-option>
+                <el-option value="HEAD"></el-option>
+                <el-option value="ANY"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="后端超时">
-              <el-input v-model="form.c5">
+              <el-input v-model="form.timeout">
                 <template slot="append">ms</template>
               </el-input>
             </el-form-item>
             <el-form-item label="Content Type">
-              <el-select v-model="form.c6" placeholder="请选择接入类型">
-                <el-option label="XML" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="form.contentTypeValue" placeholder="请选择接入类型">
+                <el-option value="XML"></el-option>
+                <el-option value="JSON"></el-option>
+                <el-option value="格式文本"></el-option>
               </el-select>
               <p>数据解析及标准化，外部数据格式</p>
             </el-form-item>
@@ -54,45 +60,35 @@
           <span>后端服务参数配置</span>
         </div>
         <div class="text item">
-          <el-table :data="form.tableData" border style="width: 100%" header-cell-class-name="tb-bg">
+          <el-table :data="form.ServiceParameters" border style="width: 100%" header-cell-class-name="tb-bg">
             <el-table-column prop="n1" label="修改顺序" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.n1" placeholder="修改顺序"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n2" label="参数名" width="180">
+            <el-table-column prop="name" label="后端参数名称" width="180">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n2" placeholder="参数名"></el-input>
+                <el-input v-model="scope.row.name" placeholder="后端参数名称"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n3" label="参数位置">
+            <el-table-column prop="location" label="后端参数位置">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n3" placeholder="参数位置"></el-input>
+                <el-input v-model="scope.row.location" placeholder="后端参数位置"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n4" label="类型">
+            <el-table-column prop="type" label="对应入参名称">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n4" placeholder="类型"></el-input>
+                <el-input v-model="scope.row.type" placeholder="对应入参名称"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n5" label="必填">
+            <el-table-column prop="required" label="对应入参位置">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n5" placeholder="必填"></el-input>
+                <el-input v-model="scope.row.required" placeholder="对应入参位置"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n6" label="默认值">
+            <el-table-column prop="defaultValue" label="对应入参类型">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n6" placeholder="默认值"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column prop="n7" label="示例">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.n7" placeholder="示例"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column prop="n8" label="描述">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.n8" placeholder="描述"></el-input>
+                <el-input v-model="scope.row.defaultValue" placeholder="对应入参类型"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -115,9 +111,9 @@
         </div>
         <div class="text item">
           <el-table :data="form.tableDataM" border style="width: 100%" header-cell-class-name="tb-bg" fit>
-            <el-table-column prop="n1" label="后端参数名称" width="180">
+            <el-table-column prop="name" label="后端参数名称" width="180">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n1" placeholder="后端参数名称"></el-input>
+                <el-input v-model="scope.row.name" placeholder="后端参数名称"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="n2" label="参数值" width="180">
@@ -125,14 +121,14 @@
                 <el-input v-model="scope.row.n2" placeholder="参数值"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n3" label="参数位置">
+            <el-table-column prop="location" label="参数位置">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n3" placeholder="参数位置"></el-input>
+                <el-input v-model="scope.row.location" placeholder="参数位置"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n8" label="描述">
+            <el-table-column prop="description" label="描述">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n8" placeholder="描述"></el-input>
+                <el-input v-model="scope.row.description" placeholder="描述"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -169,10 +165,10 @@ export default {
   },
   data() {
     return {
-      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
         b1: [],
-        tableData: [],
+        ServiceParameters: [],
         tableDataM: [],
       },
     };
@@ -190,23 +186,23 @@ export default {
     createNewData(type) {
       const a = {
         n1: '',
-        n2: '',
-        n3: '',
-        n4: '',
-        n5: '',
-        n6: '',
-        n7: '',
-        n8: '',
+        description: '',
+        name: '',
+        location: '',
+        type: '',
+        required: '',
+        defaultValue: '',
+        demoValue: '',
       };
       if (type === 1) {
-        this.form.tableData.push(a);
+        this.form.ServiceParameters.push(a);
       } else {
         this.form.tableDataM.push(a);
       }
     },
     deleteData(index, type) {
       if (type === 1) {
-        this.form.tableData.splice(index, 1);
+        this.form.ServiceParameters.splice(index, 1);
       } else {
         this.form.tableDataM.splice(index, 1);
       }
@@ -224,7 +220,7 @@ export default {
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`;
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },

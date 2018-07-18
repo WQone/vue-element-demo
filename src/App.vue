@@ -10,7 +10,7 @@
           <el-menu :default-openeds="['1']">
             <el-submenu index="1">
               <template slot="title">
-                <i class="el-icon-menu"></i>API数据配置</template>
+                <i class="el-icon-menu"></i>外部API接口</template>
               <el-menu-item v-for="(item, index) in menuList" :key="index" :index="item.name" @click="linkPage(item.url)" :class="{ 'is-active': item.url === $route.path }">{{item.name}}</el-menu-item>
             </el-submenu>
           </el-menu>

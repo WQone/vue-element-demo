@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import VueBus from 'vue-bus';
 import 'element-ui/lib/theme-chalk/index.css';
+import './fonts/iconfont.css'; //  图标字体
 import './assets/css/reset.css';
 import './element';
 import App from './App';

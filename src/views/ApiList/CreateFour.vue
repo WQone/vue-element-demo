@@ -6,7 +6,7 @@
       <el-step title="定义API后端服务"></el-step>
       <el-step title="定义返回结果"></el-step>
     </el-steps>
-    <div class="create-body"  :style="formHeight">
+    <div class="create-body" :style="formHeight">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <i class="el-icon-edit"></i>
@@ -14,10 +14,12 @@
         </div>
         <div class="text item card-body">
           <el-form ref="form" :model="form" label-width="130px">
-            <el-form-item label="Http Method">
-              <el-select v-model="form.d1" placeholder="请选择Http Method">
-                <el-option label="Post" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item label="返回ContentType">
+              <el-select v-model="form.d1" placeholder="请选择返回ContentType">
+                <el-option value="JSON"></el-option>
+                <el-option value="XML"></el-option>
+                <el-option value="文本"></el-option>
+                <el-option value="HTML"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="返回结果示例">
@@ -74,6 +76,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import bases from '../../api/base';
 
 export default {
   created() {
@@ -87,7 +90,7 @@ export default {
   },
   data() {
     return {
-      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
+      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
         tableData: [],
       },
@@ -128,19 +131,31 @@ export default {
     },
     // 创建
     toNext() {
-      window.sessionStorage.clear();
-      this.$message({
-        showClose: true,
-        message: '创建成功',
-        type: 'success',
+      const a = {
+        ...this.convert.getJSON(window.sessionStorage.getItem('form1')),
+        requestConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form2'))),
+        requestParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form2')).requestParameters),
+        serviceConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form3'))),
+        ServiceParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form3')).ServiceParameters),
+      };
+      console.log(a);
+      bases.apiAdd(JSON.stringify(a)).then((res) => {
+        if (res.data.code === '0') {
+          this.$message({
+            showClose: true,
+            message: '创建成功',
+            type: 'success',
+          });
+          window.sessionStorage.clear();
+          this.$router.push({ path: '/ApiList' });
+        }
+        console.log(this.form);
       });
-      console.log(this.form);
-      this.$router.push({ path: '/ApiList' });
     },
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`;
+        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },
