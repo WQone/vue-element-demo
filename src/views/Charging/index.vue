@@ -19,8 +19,8 @@
               <div class="searchDiv">
                 <span class="searchLabel">分组</span>
                 <div class="searchInput">
-                  <el-select v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                  <el-select v-model="typeActive" placeholder="请选择" clearable>
+                    <el-option v-for="item in typeArr" :key="item.id" :label="item.name" :value="item.id">
                     </el-option>
                   </el-select>
                 </div>
@@ -42,21 +42,21 @@
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
-        <el-table-column prop="date" label="API名称" header-align="center">
+        <el-table-column prop="apiName" label="API名称" header-align="center">
         </el-table-column>
-        <el-table-column prop="province" label="分组" header-align="center">
+        <el-table-column prop="groupId" label="分组" header-align="center">
         </el-table-column>
-        <el-table-column prop="zip" label="厂商" header-align="center">
+        <el-table-column prop="factoryName" label="厂商" header-align="center">
         </el-table-column>
-        <el-table-column prop="city" label="已使用金额" header-align="center">
+        <el-table-column prop="totalAmount" label="已使用金额" header-align="center">
         </el-table-column>
-        <el-table-column prop="address" label="开通时间" header-align="center">
+        <!-- <el-table-column prop="address" label="开通时间" header-align="center">
         </el-table-column>
         <el-table-column prop="address" label="到期时间" header-align="center">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作" header-align="center">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="toItem(scope.$index, tableData)" type="text" size="small">
+            <el-button @click.native.prevent="toItem(scope.row.apiId)" type="text" size="small">
               查看详情
             </el-button>
           </template>
@@ -64,7 +64,7 @@
       </el-table>
       <div class="paging">
         <div class="block page_right">
-          <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="100">
+         <el-pagination @current-change="CurrentChange" :page-size="size" layout="total, prev, pager, next" :total="total" :current-page="page + 1">
           </el-pagination>
         </div>
       </div>
@@ -73,6 +73,9 @@
 </template>
 
 <script>
+import baseApi from '../../api/base';
+import menu from '../../utils/menu';
+
 export default {
   created() {
     this.tableHeightRun();
@@ -84,78 +87,66 @@ export default {
       } else {
         mainBody[0].removeAttribute('style');
       }
-      // console.log(document.body.clientWidth);
       this.tableHeightRun();
     };
   },
+  mounted() {
+    this.dataList();
+  },
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      province: '上海',
-      city: '普陀区',
-      address: '上海市普陀',
-      zip: 200333,
-    };
     return {
       tableHeight: 0, // 表格高度
       loading: false,
-      searchVal: null,
+      searchVal: null, // 搜索值
+      typeActive: null, // 搜索-分组
+      dateValue: null, // 搜索-时间区间
+      dateValueS: null,
       currentPage: 1,
-      tableData: Array(5).fill(item),
-      typeArr: ['工商数据', '司法数据', '经营数据', '税务数据', '企业年报', '项目信息', '知识产权', '招投标（采购）', '税务数据', '业务流水', '征信数据', '其他数据'],
-      typeActive: 0,
-      options: [{
-        value: '选项1',
-        label: '黄金糕',
-      }, {
-        value: '选项2',
-        label: '双皮奶',
-      }, {
-        value: '选项3',
-        label: '蚵仔煎',
-      }, {
-        value: '选项4',
-        label: '龙须面',
-      }, {
-        value: '选项5',
-        label: '北京烤鸭',
-      }],
-      value: '',
-      dateValue: '',
+      tableData: [],
+      typeArr: menu.typeArr,
+      page: 0,
+      size: 10,
+      total: 0,
     };
   },
   methods: {
+    // 获取列表
+    dataList() {
+      this.loading = true;
+      baseApi.chargingList(this.page, this.size,
+        this.typeActive, this.searchVal, this.dateValueS).then((res) => {
+        if (res.data.code === '0') {
+          const data = res.data.data.result;
+          for (let i = 0; i < data.length; i += 1) {
+            data[i].num = (i + 1) + (this.page * this.size);
+            data[i].createdTime = data[i].createdTime ? this.convert.formatDate(data[i].createdTime) : '';
+            if (data[i].groupId) {
+              const arr = menu.typeArr.filter((item) => item.id === data[i].groupId);
+              data[i].groupId = arr[0].name;
+            }
+          }
+          this.tableData = data;
+          this.total = res.data.data.total;
+        }
+        this.loading = false;
+      });
+    },
     // 当前页改变
     CurrentChange(val) {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
+      this.page = val - 1;
+      this.dataList();
       console.log(`当前页: ${val}`);
-    },
-    // 查看详情
-    toItem(index, data) {
-      console.log(index, data);
-    },
-    // 点击数据类型
-    changeType(index) {
-      this.typeActive = index;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      console.log(index);
     },
     // 点击搜索
     toSearch() {
-      this.dateValue = this.dateValue ? `${this.convert.convertDateOther(this.dateValue[0])}-${this.convert.convertDateOther(this.dateValue[1])}` : '';
+      this.dateValueS = this.dateValue ? `${this.convert.convertDateOther(this.dateValue[0])}-${this.convert.convertDateOther(this.dateValue[1])}` : '';
       console.log(this.dateValue);
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      console.log(this.searchVal);
+      this.page = 0;
+      this.dataList();
+    },
+    // 查看详情
+    toItem(id) {
+      this.$router.push({ path: '/ApiList/Item', query: { id } });
     },
     //  计算表格高度
     tableHeightRun() {

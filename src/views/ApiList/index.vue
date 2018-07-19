@@ -40,7 +40,7 @@
           <el-button type="primary" @click="toCreatePage">创建API</el-button>
         </div>
         <div class="block page_right">
-          <el-pagination @current-change="CurrentChange" :page-size="size" layout="total, prev, pager, next" :total="total">
+          <el-pagination @current-change="CurrentChange" :page-size="size" layout="total, prev, pager, next" :total="total" :current-page="page + 1">
           </el-pagination>
         </div>
       </div>
@@ -69,21 +69,19 @@ export default {
       searchVal: null,
       tableData: [],
       typeArr: menu.typeArr,
-      typeActive: 1,
+      typeActive: null,
       page: 0,
-      size: 5,
+      size: 10,
       total: 0,
     };
   },
   methods: {
     // 获取列表
-    dataList(page, size, filterForm) {
+    dataList() {
       this.loading = true;
-      if (page !== undefined) this.page = page;
-      if (size !== undefined) this.size = size;
-      baseApi.apiFind(this.typeActive, this.searchVal).then((res) => {
+      baseApi.apiFind(this.page, this.size, this.typeActive, this.searchVal).then((res) => {
         if (res.data.code === '0') {
-          const data = res.data.data;
+          const data = res.data.data.result;
           for (let i = 0; i < data.length; i += 1) {
             data[i].num = (i + 1) + (this.page * this.size);
             data[i].createdTime = data[i].createdTime ? this.convert.formatDate(data[i].createdTime) : '';
@@ -91,14 +89,14 @@ export default {
             data[i].groupId = arr[0].name;
           }
           this.tableData = data;
-          this.total = this.tableData.length;
+          this.total = res.data.data.total;
         }
         this.loading = false;
-        console.log(page, size, filterForm);
       });
     },
     // 当前页改变
     CurrentChange(val) {
+      this.page = val - 1;
       this.dataList(val);
       console.log(`当前页: ${val}`);
     },
@@ -108,13 +106,19 @@ export default {
     },
     // 点击数据类型
     changeType(index) {
-      this.typeActive = index;
+      this.page = 0;
+      if (this.typeActive === index) {
+        this.typeActive = null;
+      } else {
+        this.typeActive = index;
+      }
       this.dataList();
       console.log(index);
     },
     // 点击搜索
     toSearch() {
-      this.dataList(this.page, this.size, this.searchVal);
+      this.page = 0;
+      this.dataList();
     },
     // 创建API
     toCreatePage() {

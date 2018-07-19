@@ -27,17 +27,17 @@
                 <el-option value="AppKey&Appsecret"></el-option>
                 <el-option value="AppCode"></el-option>
               </el-select>
+            </el-form-item> -->
+            <el-form-item label="AppKey" v-if="a3==='AppKey&Appsecret'">
+              <el-input v-model="form.appKey" placeholder="请输入AppKey"></el-input>
             </el-form-item>
-            <el-form-item label="AppKey" v-if="form.a3==='AppKey&Appsecret'">
-              <el-input v-model="form.a31" placeholder="请输入AppKey"></el-input>
-            </el-form-item>
-            <el-form-item label="AppSecret" v-if="form.a3==='AppKey&Appsecret'">
-              <el-input v-model="form.a32" placeholder="请输入AppSecret"></el-input>
+            <el-form-item label="AppSecret" v-if="a3==='AppKey&Appsecret'">
+              <el-input v-model="form.appSecret" placeholder="请输入AppSecret"></el-input>
             </el-form-item>
             <el-form-item label="AppCode" v-else>
-              <el-input v-model="form.a4" placeholder="请输入AppCode"></el-input>
-            </el-form-item> -->
-             <el-form-item label="接入模式">
+              <el-input v-model="form.appCode" placeholder="请输入AppCode"></el-input>
+            </el-form-item>
+            <!-- <el-form-item label="接入模式">
               <el-radio-group v-model="form.accessPattern">
                 <el-radio label="实时接入"></el-radio>
                 <el-radio label="离线接入"></el-radio>
@@ -45,12 +45,12 @@
             </el-form-item>
             <el-form-item label="接入形式">
               <el-input v-model="form.accessMode"></el-input>
-            </el-form-item>
-            <el-form-item label="接入类型">
+            </el-form-item> -->
+            <!-- <el-form-item label="接入类型">
               <el-input v-model="form.accessType"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="接口类型">
-              <el-select v-model="form.a5" placeholder="请选择接口类型">
+              <el-select v-model="form.accessType" placeholder="请选择接口类型">
                 <el-option value="restful API"></el-option>
                 <el-option value="webservice"></el-option>
                 <el-option value="ESB"></el-option>
@@ -82,7 +82,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="单笔金额">
-              <el-input v-model="form.a9"></el-input>
+              <el-input-number v-model="form.amount" :min="0"  label="描述文字"></el-input-number>
+              <!-- <el-input v-model="form.amount"></el-input> -->
               <p>金额根据计费模式自动切换</p>
             </el-form-item>
           </el-form>
@@ -115,9 +116,10 @@ export default {
       typeArr: menu.typeArr,
       formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
-        // a3: 'AppKey&Appsecret',
-        // a5: 'restful API',
+        accessType: 'restful API',
+        amount: 0,
       },
+      a3: 'AppKey&Appsecret',
       rules: {
         description: [
           { required: true, validator: returnTrue, message: '请输入描述', trigger: 'blur' },
@@ -128,7 +130,7 @@ export default {
   methods: {
     // 获取本地存储数据
     getLocal() {
-      const base = window.sessionStorage.getItem('form1');
+      const base = window.sessionStorage.getItem('form');
       if (base && base !== '{}') {
         this.form = this.convert.getJSON(base);
         console.log(787, this.form);
@@ -136,7 +138,7 @@ export default {
     },
     // 下一步
     toNext() {
-      window.sessionStorage.setItem('form1', JSON.stringify(this.form));
+      window.sessionStorage.setItem('form', JSON.stringify(this.form));
       this.$router.push({ path: '/CreateTwo' });
     },
     //  计算表格高度

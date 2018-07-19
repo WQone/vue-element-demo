@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="cardList_title">{{Info.apiName}} - 详情</p>
-    <div class="create-body form-text" :style="formHeight">
+    <div class="create-body form-text" :style="formHeight" v-loading="loading">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <i class="el-icon-setting"></i>
@@ -19,7 +19,7 @@
                 <p>{{Info.apiName}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :lg="12">
+            <!-- <el-col :span="12" :lg="12">
               <el-form-item label="接入模式：">
                 <p>{{Info.accessPattern}}</p>
               </el-form-item>
@@ -27,6 +27,32 @@
             <el-col :span="12" :pull="5" :lg="12">
               <el-form-item label="接入形式：">
                 <p>{{Info.accessMode}}</p>
+              </el-form-item>
+            </el-col>
+            -->
+            <el-col :span="12" :lg="12">
+              <el-form-item label="AppKey：">
+                <p>{{Info.appKey}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :pull="5" :lg="12">
+              <el-form-item label="AppSecret：">
+                <p>{{Info.appSecret}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :lg="12">
+              <el-form-item label="接口类型：">
+                <p>{{Info.accessType}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :pull="5" :lg="12">
+              <el-form-item label="厂商名称：">
+                <p>{{Info.factoryName}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :lg="12">
+              <el-form-item label="描述：">
+                <p>{{Info.description}}</p>
               </el-form-item>
             </el-col>
           </el-form>
@@ -38,15 +64,15 @@
           <span>计费方式</span>
         </div>
         <div class="text item">
-          <el-form ref="Info" :model="Info" label-width="150px" class="w-text">
+          <el-form label-width="150px" class="w-text">
             <el-col :span="12">
               <el-form-item label="计费模式：">
-                <p>{{Info.accessMode}}</p>
+                <p>{{Info.billMode}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12" :pull="5">
               <el-form-item label="单笔金额（元）：">
-                <p>{{Info.accessMode}}</p>
+                <p>{{Info.amount}}</p>
               </el-form-item>
             </el-col>
           </el-form>
@@ -74,9 +100,67 @@
                 <p>{{requestConfig.httpMethod}}</p>
               </el-form-item>
             </el-col>
+          </el-form>
+        </div>
+      </el-card>
+      <el-card class="box-card" shadow="never" style="margin-top:15px;">
+        <div slot="header" class="clearfix">
+          <i class="el-icon-setting"></i>
+          <span>请求入参信息</span>
+        </div>
+        <div class="text item">
+          <el-form label-width="150px">
+            <el-table :data="requestParameters" border style="width: 100%" header-cell-class-name="tb-bg">
+              <!-- <el-table-column prop="n1" label="修改顺序">
+              </el-table-column> -->
+              <el-table-column prop="name" label="参数名">
+              </el-table-column>
+              <el-table-column prop="location" label="参数位置 ">
+              </el-table-column>
+              <el-table-column prop="type" label="类型">
+              </el-table-column>
+              <el-table-column prop="required" label="必填">
+              </el-table-column>
+              <el-table-column prop="defaultValue" label="默认值">
+              </el-table-column>
+              <el-table-column prop="demoValue" label="示例">
+              </el-table-column>
+              <el-table-column prop="description" label="描述">
+              </el-table-column>
+            </el-table>
+          </el-form>
+        </div>
+      </el-card>
+      <el-card class="box-card" shadow="never" style="margin-top:15px;">
+        <div slot="header" class="clearfix">
+          <i class="el-icon-setting"></i>
+          <span>后端服务信息</span>
+        </div>
+        <div class="text item">
+          <el-form label-width="150px" class="w-text">
+            <el-col :span="12">
+              <el-form-item label="后端服务类型：">
+                <p>{{serviceConfig.protocol}}</p>
+              </el-form-item>
+            </el-col>
             <el-col :span="12" :pull="5">
-              <el-form-item label="入参请求模式：">
-                <p>{{requestConfig.accessMode}}</p>
+              <el-form-item label="后端服务地址：">
+                <p>{{serviceConfig.address}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="Http Method：">
+                <p>{{serviceConfig.httpMethod}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :pull="5">
+              <el-form-item label="后端超时（S）：">
+                <p>{{serviceConfig.timeout}}</p>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="Content Type：">
+                <p>{{serviceConfig.contentTypeValue}}</p>
               </el-form-item>
             </el-col>
           </el-form>
@@ -88,29 +172,25 @@
           <span>后端服务参数</span>
         </div>
         <div class="text item">
-          <el-form ref="Info" :model="Info" label-width="150px">
-            <el-table :data="Info.tableData" border style="width: 100%" header-cell-class-name="tb-bg">
-              <el-table-column prop="n1" label="修改顺序">
+          <el-form label-width="150px">
+            <el-table :data="serviceParameters" border style="width: 100%" header-cell-class-name="tb-bg">
+              <!-- <el-table-column prop="n1" label="修改顺序">
+              </el-table-column> -->
+              <el-table-column prop="name" label="后端参数名称">
               </el-table-column>
-              <el-table-column prop="name" label="参数名">
+              <el-table-column prop="location" label="后端参数位置 ">
               </el-table-column>
-              <el-table-column prop="location" label="参数位置">
+              <el-table-column prop="type" label="后端参数类型">
               </el-table-column>
-              <el-table-column prop="type" label="类型">
+              <el-table-column prop="catalog" label="请求参数类型">
               </el-table-column>
-              <el-table-column prop="required" label="必填">
-              </el-table-column>
-              <el-table-column prop="defaultValue" label="默认值">
-              </el-table-column>
-              <el-table-column prop="demoValue" label="示例">
-              </el-table-column>
-              <el-table-column prop="description" label="描述">
+              <el-table-column prop="constValue" label="参数值">
               </el-table-column>
             </el-table>
           </el-form>
         </div>
       </el-card>
-      <el-card class="box-card" shadow="never" style="margin-top:15px;">
+      <!-- <el-card class="box-card" shadow="never" style="margin-top:15px;">
         <div slot="header" class="clearfix">
           <i class="el-icon-setting"></i>
           <span>常量参数</span>
@@ -118,26 +198,18 @@
         <div class="text item">
           <el-form ref="Info" :model="Info" label-width="150px">
             <el-table :data="Info.tableData" border style="width: 100%" header-cell-class-name="tb-bg">
-              <el-table-column prop="n1" label="修改顺序">
+              <el-table-column prop="name" label="后端参数名称">
               </el-table-column>
-              <el-table-column prop="name" label="参数名">
+              <el-table-column prop="location" label="参数值">
               </el-table-column>
-              <el-table-column prop="location" label="参数位置">
-              </el-table-column>
-              <el-table-column prop="type" label="类型">
-              </el-table-column>
-              <el-table-column prop="required" label="必填">
-              </el-table-column>
-              <el-table-column prop="defaultValue" label="默认值">
-              </el-table-column>
-              <el-table-column prop="demoValue" label="示例">
+              <el-table-column prop="type" label="参数位置">
               </el-table-column>
               <el-table-column prop="description" label="描述">
               </el-table-column>
             </el-table>
           </el-form>
         </div>
-      </el-card>
+      </el-card> -->
       <el-card class="box-card" shadow="never" style="margin-top:15px;">
         <div slot="header" class="clearfix">
           <i class="el-icon-setting"></i>
@@ -145,19 +217,19 @@
         </div>
         <div class="text item">
           <el-form ref="Info" :model="Info" label-width="150px" class="w-text">
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-form-item label="返回类型：">
-                <p>{{Info.accessMode}}</p>
+                <p>{{resultConfig.accessMode}}</p>
+              </el-form-item>
+            </el-col> -->
+            <el-col :span="12">
+              <el-form-item label="返回结果示例：">
+                <p>{{resultConfig.successDemo}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12" :pull="5">
-              <el-form-item label="返回结果示例：">
-                <p>{{Info.accessMode}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="失败返回结果示例：">
-                <p>{{Info.accessMode}}</p>
+                <p>{{resultConfig.failDemo}}</p>
               </el-form-item>
             </el-col>
           </el-form>
@@ -169,23 +241,13 @@
           <span>错误码定义</span>
         </div>
         <div class="text item">
-          <el-form ref="Info" :model="Info" label-width="150px">
-            <el-table :data="Info.tableData" border style="width: 100%" header-cell-class-name="tb-bg">
-              <el-table-column prop="n1" label="修改顺序">
+          <el-form label-width="150px">
+            <el-table :data="resultParameters" border style="width: 100%" header-cell-class-name="tb-bg">
+              <el-table-column prop="errCode" label="错误码">
               </el-table-column>
-              <el-table-column prop="name" label="参数名">
+              <el-table-column prop="errMsg" label="错误信息">
               </el-table-column>
-              <el-table-column prop="location" label="参数位置">
-              </el-table-column>
-              <el-table-column prop="type" label="类型">
-              </el-table-column>
-              <el-table-column prop="required" label="必填">
-              </el-table-column>
-              <el-table-column prop="defaultValue" label="默认值">
-              </el-table-column>
-              <el-table-column prop="demoValue" label="示例">
-              </el-table-column>
-              <el-table-column prop="description" label="描述">
+              <el-table-column prop="info" label="描述">
               </el-table-column>
             </el-table>
           </el-form>
@@ -215,20 +277,33 @@ export default {
   },
   data() {
     return {
+      loading: false,
       formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
       Info: {},
-      requestConfig: {},
+      requestConfig: {}, //  请求基础定义
+      requestParameters: [], // 请求入参信息
+      serviceConfig: {}, // 后端服务信息
+      serviceParameters: [], // 后端服务参数
+      resultConfig: {}, // 返回结果基础定义
+      resultParameters: [], // 错误定义
     };
   },
   methods: {
     getInfo(id) {
+      this.loading = true;
       baseApi.getInfo(id).then((res) => {
         if (res.data.code === '0') {
           const arr = menu.typeArr.filter((item) => item.id === res.data.data.groupId);
           res.data.data.groupId = arr[0].name;
-          this.requestConfig = res.data.data.requestConfig;
+          this.requestConfig = res.data.data.requestConfig || {};
           this.Info = res.data.data;
+          this.requestParameters = res.data.data.requestParameters;
+          this.serviceConfig = res.data.data.serviceConfig || {};
+          this.serviceParameters = res.data.data.serviceParameters;
+          this.resultConfig = res.data.data.resultConfig || {};
+          this.resultParameters = res.data.data.resultParameters;
         }
+        this.loading = false;
         console.log(7, this.Info, res.data.data);
       });
     },

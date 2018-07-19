@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api/',
+  baseURL: `${location.protocol}//${location.host}/api/`,
   withCredentials: true,
   params: {},
 });

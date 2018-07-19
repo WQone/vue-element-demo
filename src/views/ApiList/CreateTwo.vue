@@ -15,11 +15,11 @@
         <div class="text item card-body">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="协议">
-              <el-checkbox-group v-model="form.protocol">
-                <el-checkbox label="http" name="type"></el-checkbox>
-                <el-checkbox label="https" name="type"></el-checkbox>
-                <el-checkbox label="webSocket" name="type"></el-checkbox>
-              </el-checkbox-group>
+              <el-radio-group v-model="form.protocol">
+                <el-radio label="http"></el-radio>
+                <el-radio label="https"></el-radio>
+                <!-- <el-radio label="webSocket"></el-radio> -->
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="请求地址">
               <el-input v-model="form.address"></el-input>
@@ -32,16 +32,16 @@
               <el-select v-model="form.httpMethod" placeholder="请选择Http Method">
                 <el-option value="GET"></el-option>
                 <el-option value="POST"></el-option>
-                <el-option value="PUT"></el-option>
-                <el-option value="DELETE"></el-option>
+                <!-- <el-option value="PUT"></el-option>
+                <el-option value="DELETE"></el-option> -->
               </el-select>
             </el-form-item>
-            <el-form-item label="入参请求模式">
+            <!-- <el-form-item label="入参请求模式">
               <el-select v-model="form.b5" placeholder="请选择入参请求模式">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </div>
       </el-card>
@@ -51,7 +51,7 @@
           <span>入参定义</span>
         </div>
         <div class="text item">
-          <el-table :data="form.requestParameters" border style="width: 100%" header-cell-class-name="tb-bg">
+          <el-table :data="requestParameters" border style="width: 100%" header-cell-class-name="tb-bg">
             <!-- <el-table-column prop="n1" label="修改顺序" width="180">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.n1" placeholder="修改顺序"></el-input>
@@ -64,17 +64,26 @@
             </el-table-column>
             <el-table-column prop="location" label="参数位置">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.location" placeholder="参数位置"></el-input>
+                <el-select v-model="scope.row.location" placeholder="请选择参数位置">
+                  <el-option v-for="item in locationOptions" :key="item" :value="item">
+                  </el-option>
+                </el-select>
               </template>
             </el-table-column>
             <el-table-column prop="type" label="类型">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.type" placeholder="类型"></el-input>
+                <el-select v-model="scope.row.type" placeholder="请选择类型">
+                  <el-option v-for="item in typeOptions" :key="item" :value="item">
+                  </el-option>
+                </el-select>
               </template>
             </el-table-column>
             <el-table-column prop="required" label="必填">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.required" placeholder="必填"></el-input>
+                <el-select v-model="scope.row.required" placeholder="请选择是否必填">
+                  <el-option v-for="item in requiredOptions" :key="item" :value="item">
+                  </el-option>
+                </el-select>
               </template>
             </el-table-column>
             <el-table-column prop="defaultValue" label="默认值">
@@ -107,8 +116,8 @@
       </el-card>
     </div>
     <div class="btn">
-    <el-button type="info" @click="toBefore">上一步</el-button>
-    <el-button type="primary" @click="toNext">下一步</el-button>
+      <el-button type="info" @click="toBefore">上一步</el-button>
+      <el-button type="primary" @click="toNext">下一步</el-button>
     </div>
   </div>
 </template>
@@ -126,20 +135,24 @@ export default {
   },
   data() {
     return {
+      locationOptions: ['BODY', 'HEAD', 'QUERY', 'PATH'],
+      typeOptions: ['STRING', 'INT', 'LONG', 'FLOAT', 'DOUBLE', 'BOOLEAN'],
+      requiredOptions: ['REQUIRED', 'OPTIONAL'],
       formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
-      form: {
-        protocol: [],
-        requestParameters: [],
-      },
+      form: {},
+      requestParameters: [],
     };
   },
   methods: {
     // 获取本地存储数据
     getLocal() {
-      const base = window.sessionStorage.getItem('form2');
+      const base = window.sessionStorage.getItem('requestConfig');
+      const bases = window.sessionStorage.getItem('requestParameters');
       if (base && base !== '{}') {
         this.form = this.convert.getJSON(base);
-        console.log(787, this.form);
+      }
+      if (bases && bases !== '{}') {
+        this.requestParameters = this.convert.getJSON(bases);
       }
     },
     // 新增一条数据
@@ -154,12 +167,12 @@ export default {
         demoValue: '',
         description: '',
       };
-      this.form.requestParameters.push(a);
+      this.requestParameters.push(a);
     },
     // 删除该行数据
     deleteData(index) {
-      this.form.requestParameters.splice(index, 1);
-      console.log(index, this.form.requestParameters);
+      this.requestParameters.splice(index, 1);
+      console.log(index, this.requestParameters);
     },
     // 上一步
     toBefore() {
@@ -167,8 +180,9 @@ export default {
     },
     // 下一步
     toNext() {
-      // this.form.protocol = JSON.stringify(this.form.protocol);
-      window.sessionStorage.setItem('form2', JSON.stringify(this.form));
+      // this.form.protocol = this.form.protocol.toString();
+      window.sessionStorage.setItem('requestConfig', JSON.stringify(this.form));
+      window.sessionStorage.setItem('requestParameters', JSON.stringify(this.requestParameters));
       this.$router.push({ path: '/CreateThree' });
     },
     //  计算表格高度

@@ -95,6 +95,9 @@ html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, fo
   border: none;
   border-radius: 0px;
 }
+.create-body  .el-input-number{
+  width: 100%;
+}
 .card-body {
   margin: auto;
   margin-top: 20px;
@@ -104,7 +107,9 @@ html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, fo
   max-width: 600px;
   margin: auto;
 }
-
+.el-table .el-select{
+  width: 100%;
+}
 /* 分页 */
 .paging {
   position: relative;

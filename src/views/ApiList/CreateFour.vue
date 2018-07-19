@@ -14,19 +14,19 @@
         </div>
         <div class="text item card-body">
           <el-form ref="form" :model="form" label-width="130px">
-            <el-form-item label="返回ContentType">
+            <!-- <el-form-item label="返回ContentType">
               <el-select v-model="form.d1" placeholder="请选择返回ContentType">
                 <el-option value="JSON"></el-option>
                 <el-option value="XML"></el-option>
                 <el-option value="文本"></el-option>
                 <el-option value="HTML"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="返回结果示例">
-              <el-input type="textarea" :rows="5" v-model="form.d2"></el-input>
+              <el-input type="textarea" :rows="5" v-model="form.successDemo"></el-input>
             </el-form-item>
             <el-form-item label="失败结果示例">
-              <el-input type="textarea" :rows="5" v-model="form.d3"></el-input>
+              <el-input type="textarea" :rows="5" v-model="form.failDemo"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -37,20 +37,20 @@
           <span>错误定义</span>
         </div>
         <div class="text item">
-          <el-table :data="form.tableData" border style="width: 100%" header-cell-class-name="tb-bg" fit>
-            <el-table-column prop="n1" label="错误码">
+          <el-table :data="resultParameters" border style="width: 100%" header-cell-class-name="tb-bg" fit>
+            <el-table-column prop="errCode" label="错误码">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n1" placeholder="错误码"></el-input>
+                <el-input v-model="scope.row.errCode" placeholder="错误码"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n2" label="错误信息">
+            <el-table-column prop="errMsg" label="错误信息">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n2" placeholder="错误信息"></el-input>
+                <el-input v-model="scope.row.errMsg" placeholder="错误信息"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="n3" label="描述">
+            <el-table-column prop="info" label="描述">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.n3" placeholder="描述"></el-input>
+                <el-input v-model="scope.row.info" placeholder="描述"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -91,15 +91,14 @@ export default {
   data() {
     return {
       formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
-      form: {
-        tableData: [],
-      },
+      form: {},
+      resultParameters: [],
     };
   },
   methods: {
     // 获取本地存储数据
     getLocal() {
-      const base = window.sessionStorage.getItem('form4');
+      const base = window.sessionStorage.getItem('resultConfig');
       if (base && base !== '{}') {
         this.form = this.convert.getJSON(base);
         console.log(787, this.form);
@@ -108,38 +107,36 @@ export default {
     // 新增一条数据
     createNewData() {
       const a = {
-        n1: '',
-        n2: '',
-        n3: '',
-        n4: '',
-        n5: '',
-        n6: '',
-        n7: '',
-        n8: '',
+        info: '',
+        errMsg: '',
+        errCode: '',
       };
-      this.form.tableData.push(a);
+      this.resultParameters.push(a);
     },
     // 删除该行数据
     deleteData(index) {
-      this.form.tableData.splice(index, 1);
-      console.log(index, this.form.tableData);
+      this.resultParameters.splice(index, 1);
+      console.log(index, this.resultParameters);
     },
     // 上一步
     toBefore() {
-      window.sessionStorage.setItem('form4', JSON.stringify(this.form));
+      window.sessionStorage.setItem('resultConfig', JSON.stringify(this.form));
+      window.sessionStorage.setItem('resultParameters', JSON.stringify(this.resultParameters));
       this.$router.push({ path: '/CreateThree' });
     },
     // 创建
     toNext() {
       const a = {
-        ...this.convert.getJSON(window.sessionStorage.getItem('form1')),
-        requestConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form2'))),
-        requestParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form2')).requestParameters),
-        serviceConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form3'))),
-        ServiceParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('form3')).ServiceParameters),
+        ...this.convert.getJSON(window.sessionStorage.getItem('form')),
+        requestConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('requestConfig'))),
+        requestParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('requestParameters'))),
+        serviceConfig: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('serviceConfig'))),
+        serviceParameters: JSON.stringify(this.convert.getJSON(window.sessionStorage.getItem('serviceParameters'))),
+        resultConfig: JSON.stringify(this.form),
+        resultParameters: JSON.stringify(this.resultParameters),
       };
       console.log(a);
-      bases.apiAdd(JSON.stringify(a)).then((res) => {
+      bases.apiAdd(a).then((res) => {
         if (res.data.code === '0') {
           this.$message({
             showClose: true,
