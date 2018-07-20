@@ -14,7 +14,7 @@
                 <p>{{Info.groupId}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5" :lg="12">
+            <el-col :span="12" :pull="3" :lg="12">
               <el-form-item label="API名称：">
                 <p>{{Info.apiName}}</p>
               </el-form-item>
@@ -24,7 +24,7 @@
                 <p>{{Info.accessPattern}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5" :lg="12">
+            <el-col :span="12" :pull="3" :lg="12">
               <el-form-item label="接入形式：">
                 <p>{{Info.accessMode}}</p>
               </el-form-item>
@@ -35,7 +35,7 @@
                 <p>{{Info.appKey}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5" :lg="12">
+            <el-col :span="12" :pull="3" :lg="12">
               <el-form-item label="AppSecret：">
                 <p>{{Info.appSecret}}</p>
               </el-form-item>
@@ -45,7 +45,7 @@
                 <p>{{Info.accessType}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5" :lg="12">
+            <el-col :span="12" :pull="3" :lg="12">
               <el-form-item label="厂商名称：">
                 <p>{{Info.factoryName}}</p>
               </el-form-item>
@@ -70,7 +70,7 @@
                 <p>{{Info.billMode}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5">
+            <el-col :span="12" :pull="3">
               <el-form-item label="单笔金额（元）：">
                 <p>{{Info.amount}}</p>
               </el-form-item>
@@ -90,7 +90,7 @@
                 <p>{{requestConfig.protocol}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5">
+            <el-col :span="12" :pull="3">
               <el-form-item label="请求地址：">
                 <p>{{requestConfig.address}}</p>
               </el-form-item>
@@ -143,7 +143,7 @@
                 <p>{{serviceConfig.protocol}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5">
+            <el-col :span="12" :pull="3">
               <el-form-item label="后端服务地址：">
                 <p>{{serviceConfig.address}}</p>
               </el-form-item>
@@ -153,7 +153,7 @@
                 <p>{{serviceConfig.httpMethod}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5">
+            <el-col :span="12" :pull="3">
               <el-form-item label="后端超时（S）：">
                 <p>{{serviceConfig.timeout}}</p>
               </el-form-item>
@@ -227,7 +227,7 @@
                 <p>{{resultConfig.successDemo}}</p>
               </el-form-item>
             </el-col>
-            <el-col :span="12" :pull="5">
+            <el-col :span="12" :pull="3">
               <el-form-item label="失败返回结果示例：">
                 <p>{{resultConfig.failDemo}}</p>
               </el-form-item>

@@ -4,18 +4,20 @@
     <div class="cardList_body">
       <div class="middle">
         <div class="middle-search">
-          <el-row>
-            <el-col :span="10" :lg="8">
+          <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
+            <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
+          </el-input>
+          <!-- <el-row>
+            <el-col :span="10" :lg="24">
               <div class="searchDiv">
                 <span class="searchLabel">名称</span>
                 <div class="searchInput">
                   <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
-                    <!-- <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button> -->
                   </el-input>
                 </div>
               </div>
-            </el-col>
-            <el-col :span="10" :lg="8">
+            </el-col> -->
+            <!-- <el-col :span="10" :lg="8">
               <div class="searchDiv">
                 <span class="searchLabel">分组</span>
                 <div class="searchInput">
@@ -34,18 +36,20 @@
                   </el-date-picker>
                 </div>
               </div>
-            </el-col>
-          </el-row>
+            </el-col> -->
+          <!-- </el-row> -->
         </div>
-        <div class="middle-btn">
+        <!-- <div class="middle-btn">
           <el-button type="primary" icon="el-icon-search" @click="toSearch"></el-button>
-        </div>
+        </div> -->
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
+        <el-table-column prop="num" label="#" header-align="center" width="55">
+        </el-table-column>
         <el-table-column prop="apiName" label="API名称" header-align="center">
         </el-table-column>
-        <el-table-column prop="groupId" label="分组" header-align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="groupId" label="分组" header-align="center">
+        </el-table-column> -->
         <el-table-column prop="factoryName" label="厂商" header-align="center">
         </el-table-column>
         <el-table-column prop="totalAmount" label="已使用金额" header-align="center">
@@ -80,13 +84,6 @@ export default {
   created() {
     this.tableHeightRun();
     window.onresize = () => {
-      const docWidth = document.body.clientWidth;
-      const mainBody = document.getElementsByClassName('main-body');
-      if (docWidth > 1180 && docWidth < 1400) {
-        mainBody[0].style.minWidth = '1200px';
-      } else {
-        mainBody[0].removeAttribute('style');
-      }
       this.tableHeightRun();
     };
   },
@@ -146,7 +143,7 @@ export default {
     },
     // 查看详情
     toItem(id) {
-      this.$router.push({ path: '/ApiList/Item', query: { id } });
+      this.$router.push({ path: '/Charging/Item', query: { id } });
     },
     //  计算表格高度
     tableHeightRun() {
@@ -168,6 +165,7 @@ export default {
   position: relative;
 }
 .middle-search {
+  width: 400px;
   float: left;
 }
 .middle-btn {
@@ -185,7 +183,7 @@ export default {
   float: right;
   padding: 20px 0;
 }
-.searchDiv {
+/* .searchDiv {
   position: relative;
 }
 
@@ -210,5 +208,5 @@ export default {
 }
 .searchInput .el-date-editor--daterange.el-input__inner {
   width: 100%;
-}
+} */
 </style>

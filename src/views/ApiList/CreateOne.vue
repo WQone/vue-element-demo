@@ -82,8 +82,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="单笔金额">
-              <el-input-number v-model="form.amount" :min="0"  label="描述文字"></el-input-number>
-              <!-- <el-input v-model="form.amount"></el-input> -->
+              <el-input-number v-model="form.amount" :min="0"  controls-position="right" ></el-input-number>
               <p>金额根据计费模式自动切换</p>
             </el-form-item>
           </el-form>

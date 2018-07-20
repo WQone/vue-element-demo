@@ -32,6 +32,9 @@
             <el-button @click.native.prevent="toItem(scope.row.apiId)" type="text" size="small">
               查看详情
             </el-button>
+            <!-- <el-button @click.native.prevent="toTest(scope.row.apiId)" type="text" size="small">
+              调用API
+            </el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -83,8 +86,10 @@ export default {
         if (res.data.code === '0') {
           const data = res.data.data.result;
           for (let i = 0; i < data.length; i += 1) {
-            data[i].num = (i + 1) + (this.page * this.size);
-            data[i].createdTime = data[i].createdTime ? this.convert.formatDate(data[i].createdTime) : '';
+            data[i].num = i + 1 + this.page * this.size;
+            data[i].createdTime = data[i].createdTime
+              ? this.convert.formatDate(data[i].createdTime)
+              : '';
             const arr = menu.typeArr.filter((item) => item.id === data[i].groupId);
             data[i].groupId = arr[0].name;
           }
@@ -103,6 +108,16 @@ export default {
     // 查看详情
     toItem(id) {
       this.$router.push({ path: '/ApiList/Item', query: { id } });
+    },
+    toTest(id) {
+      baseApi.routeTest(id).then((res) => {
+        if (res.data.code === '0') {
+          this.$message({
+            message: '调用成功',
+            type: 'success',
+          });
+        }
+      });
     },
     // 点击数据类型
     changeType(index) {
@@ -127,7 +142,12 @@ export default {
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.tableHeight = window.tableCustom.tableHeight(['.cardList_title', '.cardList_ul', '.paging', 135]);
+        this.tableHeight = window.tableCustom.tableHeight([
+          '.cardList_title',
+          '.cardList_ul',
+          '.paging',
+          135,
+        ]);
       };
       setTimeout(tableHeightFun, 0);
     },

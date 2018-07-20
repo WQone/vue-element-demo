@@ -8,6 +8,7 @@ import CreateThree from '@/views/ApiList/CreateThree';
 import CreateFour from '@/views/ApiList/CreateFour';
 import Account from '@/views/Account';
 import Charging from '@/views/Charging';
+import ChargingItem from '@/views/Charging/Item';
 
 Vue.use(Router);
 
@@ -57,6 +58,11 @@ export default new Router({
       path: '/Charging',
       name: 'Charging',
       component: Charging,
+    },
+    {
+      path: '/Charging/Item',
+      name: 'ChargingItem',
+      component: ChargingItem,
     },
   ],
 });

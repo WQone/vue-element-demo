@@ -1,4 +1,5 @@
 import api from './index';
+import config from '../config';
 
 const path = {
   apiFind: '/api/find', // 获取数据
@@ -7,6 +8,8 @@ const path = {
   chargingList: '/api/free/list', // 计费管理
   accountList: '/api/account/list', // 对账列表
   accountExport: '/api/account/export', // 对账导出
+  routeTest: '/api/route/test', // 调用API
+  apiAmount: '/api/amount', //  计费详情
 };
 
 // 获取数据
@@ -38,18 +41,18 @@ const chargingList = (page, count, groupId, apiName, dateValue) =>
   });
 
 // 获取数据
-const accountList = (page, count, apiName) =>
+const accountList = (page, count, factoryName) =>
   api.get(path.accountList, {
     params: {
       page,
       count,
-      apiName,
+      factoryName,
     },
   });
 
-  // 文件导出
+// 文件导出
 const accountExport = (form) => {
-  let url = `http://192.168.10.149:8080/${path.accountExport}?`;
+  let url = `${config.apiHost}${path.accountExport}?`;
   const keys = Object.keys(form);
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];
@@ -58,6 +61,26 @@ const accountExport = (form) => {
   return encodeURI(url);
 };
 
+const routeTest = (apiId, params) =>
+  api.get(path.routeTest, {
+    params: {
+      apiId,
+      params: {},
+    },
+  });
+
+const apiAmount = (page, count, apiId, apiName, startTime, endTime) =>
+  api.get(path.apiAmount, {
+    params: {
+      page,
+      count,
+      apiId,
+      apiName,
+      startTime,
+      endTime,
+    },
+  });
+
 export default {
   apiFind,
   apiAdd,
@@ -65,4 +88,6 @@ export default {
   chargingList,
   accountList,
   accountExport,
+  routeTest,
+  apiAmount,
 };

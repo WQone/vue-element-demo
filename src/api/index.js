@@ -6,9 +6,10 @@
 
 import axios from 'axios';
 import { Message } from 'element-ui';
+import config from '../config';
 
 const instance = axios.create({
-  baseURL: `${location.protocol}//${location.host}/api/`,
+  baseURL: config.apiHost,
   withCredentials: true,
   params: {},
 });

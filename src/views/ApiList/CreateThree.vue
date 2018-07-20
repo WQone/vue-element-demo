@@ -16,7 +16,8 @@
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="后端服务类型">
               <el-radio-group v-model="form.protocol">
-                <el-radio label="Http/Https"></el-radio>
+                <el-radio label="Http"></el-radio>
+                <el-radio label="Https"></el-radio>
                 <!-- <el-radio label="函数计算"></el-radio> -->
               </el-radio-group>
             </el-form-item>
@@ -41,7 +42,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="后端超时">
-              <el-input v-model="form.timeout">
+              <el-input v-model.number="form.timeout" type="number">
                 <template slot="append">ms</template>
               </el-input>
             </el-form-item>
@@ -284,6 +285,8 @@ export default {
     },
     // 上一步
     toBefore() {
+      window.sessionStorage.setItem('serviceConfig', JSON.stringify(this.form));
+      window.sessionStorage.setItem('serviceParameters', JSON.stringify(this.serviceParameters));
       this.$router.push({ path: '/CreateTwo' });
     },
     // 下一步

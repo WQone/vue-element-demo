@@ -176,6 +176,8 @@ export default {
     },
     // 上一步
     toBefore() {
+      window.sessionStorage.setItem('requestConfig', JSON.stringify(this.form));
+      window.sessionStorage.setItem('requestParameters', JSON.stringify(this.requestParameters));
       this.$router.push({ path: '/CreateOne' });
     },
     // 下一步

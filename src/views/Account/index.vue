@@ -10,18 +10,20 @@
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" :height="tableHeight">
+        <el-table-column prop="num" label="#" header-align="center" width="55">
+        </el-table-column>
         <el-table-column prop="factoryName" label="厂商" header-align="center">
         </el-table-column>
         <el-table-column prop="apiName" label="API名称" header-align="center">
         </el-table-column>
-        <el-table-column prop="groupId" label="分组" header-align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="groupId" label="分组" header-align="center">
+        </el-table-column> -->
         <el-table-column prop="totalAmount" label="已使用金额" header-align="center">
         </el-table-column>
-        <el-table-column prop="address" label="已开通时间" header-align="center">
+        <!-- <el-table-column prop="address" label="已开通时间" header-align="center">
         </el-table-column>
         <el-table-column prop="zip" label="到期时间" header-align="center">
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div class="paging">
         <div class="page_left">
