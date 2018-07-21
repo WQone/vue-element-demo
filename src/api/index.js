@@ -26,11 +26,7 @@ instance.interceptors.request.use((request) => {
 
 instance.interceptors.response.use(
   (response) => {
-    if (
-      response.data.code !== '0' &&
-      response.data.code !== '20000' &&
-      response.data.code !== '401'
-    ) {
+    if (response.data.code !== '0') {
       Message({
         message: response.data.message,
         type: 'warning',

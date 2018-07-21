@@ -3,3 +3,4 @@
 /dist/
 /*.js
 src/vuex/*
+src/router/*

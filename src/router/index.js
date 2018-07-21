@@ -1,22 +1,25 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ApiList from '@/views/ApiList';
-import Item from '@/views/ApiList/Item';
-import CreateOne from '@/views/ApiList/CreateOne';
-import CreateTwo from '@/views/ApiList/CreateTwo';
-import CreateThree from '@/views/ApiList/CreateThree';
-import CreateFour from '@/views/ApiList/CreateFour';
-import Account from '@/views/Account';
-import Charging from '@/views/Charging';
-import ChargingItem from '@/views/Charging/Item';
+
+const ApiList = (resolve) => require(['@/views/ApiList'], resolve);
+const Item = (resolve) => require(['@/views/ApiList/Item'], resolve);
+const CreateOne = (resolve) => require(['@/views/ApiList/CreateOne'], resolve);
+const CreateTwo = (resolve) => require(['@/views/ApiList/CreateTwo'], resolve);
+const CreateThree = (resolve) => require(['@/views/ApiList/CreateThree'], resolve);
+const CreateFour = (resolve) => require(['@/views/ApiList/CreateFour'], resolve);
+const Account = (resolve) => require(['@/views/Account'], resolve);
+const Charging = (resolve) => require(['@/views/Charging'], resolve);
+const ChargingItem = (resolve) => require(['@/views/Charging/Item'], resolve);
+const NotFound = (resolve) => require(['@/views/NotFound'], resolve);
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
+      name: 'index',
       redirect: '/ApiList',
     },
     {
@@ -63,6 +66,11 @@ export default new Router({
       path: '/Charging/Item',
       name: 'ChargingItem',
       component: ChargingItem,
+    },
+    {
+      path: '*',
+      name: '404',
+      component: NotFound,
     },
   ],
 });

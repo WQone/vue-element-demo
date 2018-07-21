@@ -16,8 +16,8 @@
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="后端服务类型">
               <el-radio-group v-model="form.protocol">
-                <el-radio label="Http"></el-radio>
-                <el-radio label="Https"></el-radio>
+                <el-radio label="http"></el-radio>
+                <el-radio label="https"></el-radio>
                 <!-- <el-radio label="函数计算"></el-radio> -->
               </el-radio-group>
             </el-form-item>
@@ -231,6 +231,7 @@ export default {
       catalogOptions: ['REQUEST', 'CONSTANT', 'SYSTEM'],
       formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 200])}px;`, // 表单高度
       form: {
+        contentTypeValue: 'JSON',
         // b1: [],
         // tableDataM: [],
       },

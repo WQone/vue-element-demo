@@ -10,6 +10,7 @@ const path = {
   accountExport: '/api/account/export', // 对账导出
   routeTest: '/api/route/test', // 调用API
   apiAmount: '/api/amount', //  计费详情
+  graphAmount: '/api/graph', //  计费图表
 };
 
 // 获取数据
@@ -81,6 +82,8 @@ const apiAmount = (page, count, apiId, apiName, startTime, endTime) =>
     },
   });
 
+const graphAmount = (id) => api.get(`${path.graphAmount}/${id}`);
+
 export default {
   apiFind,
   apiAdd,
@@ -90,4 +93,5 @@ export default {
   accountExport,
   routeTest,
   apiAmount,
+  graphAmount,
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="cardList_title">API-列表详情</p>
+    <p class="cardList_title">{{graphForm.apiName}}-消费详情</p>
     <div class="create-body form-text" :style="formHeight" v-loading="loading">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
@@ -8,7 +8,12 @@
           <span>消费概览</span>
         </div>
         <div class="text item">
-          <div id="echart" ref="mychart" style="height:300px;text-align: center;"></div>
+          <el-row style="height: 70px;line-height: 70px;width: 90%;margin: auto;font-size:14px;">
+            <el-col :span="8">消费总额（元）：{{graphForm.totalAmount}}</el-col>
+            <el-col :span="8">调用次数（次）：{{graphForm.count}} </el-col>
+            <el-col :span="8">接入时间：{{graphForm.createdTime}}</el-col>
+          </el-row>
+          <div id="echart" ref="mychart" style="height:290px;text-align: center;"></div>
         </div>
       </el-card>
       <el-card class="box-card" shadow="never">
@@ -20,7 +25,7 @@
           <div class="middle">
             <div class="middle-search">
               <el-row>
-                <el-col :span="12" :lg="12">
+                <!-- <el-col :span="12" :lg="12">
                   <div class="searchDiv">
                     <span class="searchLabel">名称</span>
                     <div class="searchInput">
@@ -28,7 +33,7 @@
                       </el-input>
                     </div>
                   </div>
-                </el-col>
+                </el-col> -->
                 <!-- <el-col :span="10" :lg="8">
               <div class="searchDiv">
                 <span class="searchLabel">分组</span>
@@ -40,7 +45,7 @@
                 </div>
               </div>
             </el-col> -->
-                <el-col :span="12" :lg="12">
+                <el-col :span="24" :lg="24">
                   <div class="searchDiv">
                     <span class="searchLabel">时间区间</span>
                     <div class="searchInput">
@@ -55,10 +60,10 @@
               <el-button type="primary" icon="el-icon-search" @click="toSearch"></el-button>
             </div>
           </div>
-          <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
+          <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit header-cell-class-name="tb-bg">
             <el-table-column prop="num" label="#" width="55">
             </el-table-column>
-            <el-table-column prop="apiName" label="调用请求">
+            <el-table-column prop="url" label="调用请求" min-width="120">
             </el-table-column>
             <el-table-column prop="createdAt" label="调用时间">
             </el-table-column>
@@ -66,7 +71,7 @@
             </el-table-column>
             <el-table-column label="调用结果">
               <template slot-scope="scope">
-                <el-button @click.native.prevent="toItem(scope.row.invokeResult)" type="text" size="small">
+                <el-button @click.native.prevent="toItem(scope.row)" type="text" size="small">
                   详情
                 </el-button>
               </template>
@@ -84,15 +89,16 @@
     <div class="btn">
       <el-button plain @click="goList">返回列表</el-button>
     </div>
-    <el-dialog title="API名称 - 调用结果" :visible.sync="dialogFormVisible">
-      <el-form>
-        <el-form-item label="调用时间：2018-7-2">
-          <el-input v-model="invokeResult" auto-complete="off" type="textarea" :rows="20"></el-input>
-        </el-form-item>
-      </el-form>
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" custom-class="dialog-custom">
+      <div style="height: 50px;line-height: 50px;font-size:15px;">调用时间:
+        <span style="margin-left:10px;">{{createdAtDg}}</span>
+      </div>
+      <div style="height: 20px;line-height: 20px;font-size:15px">调用结果:</div>
+      <div v-html="invokeResult" :style="dialogHeight" style="overflow-y:auto;background: #f2f2f2;margin: 10px 0;padding:10px;">
+      </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <!-- <el-button @click="dialogFormVisible = false">取 消</el-button> -->
+        <el-button @click="dialogFormVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -101,6 +107,7 @@
 <script>
 import baseApi from '../../api/base';
 import menu from '../../utils/menu';
+import JSONfmatter from '../../utils/JSONfmatter';
 import echarts from '../../utils/echartsImport'; //  按需引入echarts，降低打包体积
 
 export default {
@@ -113,10 +120,13 @@ export default {
   },
   mounted() {
     this.myChart = echarts.init(this.$refs.mychart);
-    this.myChart.setOption(this.opt); // 图表
     this.dataList();
+    this.graphList();
   },
   computed: {
+    dialogHeight() {
+      return `height: ${window.innerHeight - 380}px; overflow-y: auto;`;
+    },
     opt() {
       const obj = {
         tooltip: {
@@ -126,23 +136,30 @@ export default {
             type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
           },
         },
+        color: ['#3398DB'],
         grid: {
-          left: '1%',
-          right: '1%',
+          left: '2%',
+          right: '2%',
           bottom: '1%',
-          height: '230',
+          height: '260',
           containLabel: true,
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.graphData.date,
+          // axisTick: {
+          //   interval: 0,
+          //   alignWithLabel: true,
+          // },
+          axisLabel: { rotate: 50, interval: 0 },
         },
         yAxis: {
           type: 'value',
+          name: '( 次  )',
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: this.graphData.count,
             type: 'line',
           },
         ],
@@ -152,7 +169,9 @@ export default {
   },
   data() {
     return {
+      title: '',
       invokeResult: '', // 调用结果
+      createdAtDg: '', // 调用时间
       dialogFormVisible: false, // 弹框显示隐藏
       myChart: null,
       formHeight: 0, // 表格高度
@@ -168,9 +187,41 @@ export default {
       page: 0,
       size: 10,
       total: 0,
+      graphData: {
+        date: [],
+        count: [],
+      }, // 图表数据
+      graphForm: {},
     };
   },
   methods: {
+    // 获取图表
+    graphList() {
+      baseApi.graphAmount(this.$route.query.id).then((res) => {
+        if (res.data.code === '0') {
+          const data = res.data.data.list;
+          const a = [];
+          const b = [];
+          for (let j = -30; j < 1; j += 1) {
+            b.push('');
+            a.push(this.convert.getDay(j));
+          }
+          for (let i = 0; i < data.length; i += 1) {
+            if (a.indexOf(data[i].date) > -1) {
+              const index = a.indexOf(data[i].date);
+              b[index] = data[i].count;
+            }
+          }
+          console.log(a, b);
+          this.graphData = {
+            date: a,
+            count: b,
+          };
+          this.graphForm = res.data.data.head;
+          this.myChart.setOption(this.opt); // 图表
+        }
+      });
+    },
     // 获取列表
     dataList() {
       this.loading = true;
@@ -218,17 +269,25 @@ export default {
     },
     // 返回列表
     goList() {
-      this.$router.push({ path: '/ApiList' });
+      this.$router.push({ path: '/Charging' });
     },
     // 点击详情
     toItem(item) {
-      this.invokeResult = item;
+      console.log('22', JSONfmatter(item));
+      // this.invokeResult = JSONfmatter(JSON.parse(item));
+      this.title = `${item.apiName} - 调用结果`;
+      this.createdAtDg = item.createdAt;
+      this.invokeResult = JSONfmatter(JSON.parse(item.invokeResult));
       this.dialogFormVisible = true;
     },
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = window.tableCustom.tableHeight(['.cardList_title', '.paging', 135]);
+        this.formHeight = `height: ${window.tableCustom.tableHeight([
+          '. cardList_title',
+          '.btn',
+          200,
+        ])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },
@@ -244,7 +303,7 @@ export default {
   padding: 20px;
 }
 .box-card {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 .middle {
   overflow: hidden;
@@ -305,6 +364,10 @@ export default {
 <style>
 .el-dialog__body {
   padding: 0px 30px;
+}
+.dialog-custom {
+  margin-top: 10vh !important;
+  text-align: left;
 }
 </style>
 

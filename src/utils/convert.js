@@ -552,7 +552,33 @@ const getClient = (el, X, Y) => {
   return getClient(el.offsetParent, XX + el.offsetLeft, YY + el.offsetTop);
 };
 
+// 根据当前日期获取指定日期
+const getDay = (day) => {
+  let today = new Date();
+
+  let targetday_milliseconds = today.getTime() + 1000 * 60 * 60 * 24 * day;
+
+  today.setTime(targetday_milliseconds); //注意，这行是关键代码
+
+  let tYear = today.getFullYear();
+  let tMonth = today.getMonth();
+  let tDate = today.getDate();
+  tMonth = doHandleMonth(tMonth + 1);
+  tDate = doHandleMonth(tDate);
+  return tYear + '-' + tMonth + '-' + tDate;
+};
+
+const doHandleMonth = (month) => {
+  let m = month;
+  if (month.toString().length == 1) {
+    m = '0' + month;
+  }
+  return m;
+};
+
 export default {
+  getDay,
+  doHandleMonth,
   formatDate,
   getArrayMin, // 获取数组最小值
   getArrayMax, //  获取数组最大值

@@ -273,12 +273,15 @@ export default {
       this.tableHeightRun();
     };
   },
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       loading: false,
-      formHeight: `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`, // 表单高度
+      formHeight: `height: ${window.tableCustom.tableHeight([
+        '. el-steps--simple',
+        '.btn',
+        190,
+      ])}px;`, // 表单高度
       Info: {},
       requestConfig: {}, //  请求基础定义
       requestParameters: [], // 请求入参信息
@@ -293,8 +296,10 @@ export default {
       this.loading = true;
       baseApi.getInfo(id).then((res) => {
         if (res.data.code === '0') {
-          const arr = menu.typeArr.filter((item) => item.id === res.data.data.groupId);
-          res.data.data.groupId = arr[0].name;
+          if (res.data.data.groupId) {
+            const arr = menu.typeArr.filter((item) => item.id === res.data.data.groupId);
+            res.data.data.groupId = arr[0].name;
+          }
           this.requestConfig = res.data.data.requestConfig || {};
           this.Info = res.data.data;
           this.requestParameters = res.data.data.requestParameters;
@@ -314,7 +319,11 @@ export default {
     //  计算表格高度
     tableHeightRun() {
       const tableHeightFun = () => {
-        this.formHeight = `height: ${window.tableCustom.tableHeight(['. el-steps--simple', '.btn', 190])}px;`;
+        this.formHeight = `height: ${window.tableCustom.tableHeight([
+          '. el-steps--simple',
+          '.btn',
+          190,
+        ])}px;`;
       };
       setTimeout(tableHeightFun, 0);
     },
@@ -330,7 +339,7 @@ export default {
   padding: 20px;
 }
 .box-card {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 </style>
 

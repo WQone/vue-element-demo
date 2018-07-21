@@ -17,6 +17,8 @@
         </el-table-column>
         <el-table-column prop="apiName" label="API名称" header-align="center">
         </el-table-column>
+        <el-table-column prop="apiId" label="apiId" header-align="center">
+        </el-table-column>
         <el-table-column prop="accessType" label="类型" header-align="center">
         </el-table-column>
         <el-table-column prop="groupId" label="分组" header-align="center">
@@ -90,8 +92,10 @@ export default {
             data[i].createdTime = data[i].createdTime
               ? this.convert.formatDate(data[i].createdTime)
               : '';
-            const arr = menu.typeArr.filter((item) => item.id === data[i].groupId);
-            data[i].groupId = arr[0].name;
+            if (data[i].groupId) {
+              const arr = menu.typeArr.filter((item) => item.id === data[i].groupId);
+              data[i].groupId = arr[0].name;
+            }
           }
           this.tableData = data;
           this.total = res.data.data.total;
