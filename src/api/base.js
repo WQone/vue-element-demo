@@ -66,7 +66,7 @@ const routeTest = (apiId, params) =>
   api.get(path.routeTest, {
     params: {
       apiId,
-      params: {},
+      params,
     },
   });
 

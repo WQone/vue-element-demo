@@ -5,7 +5,7 @@
 let apiHost = `${location.protocol}//${location.host}/api/`;
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'master') {
-  apiHost = 'http://121.9.245.185:8088/';
+  apiHost = 'http://10.194.10.201:8088/';
 }
 
 console.log(process.env.NODE_ENV);

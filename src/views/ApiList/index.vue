@@ -34,9 +34,9 @@
             <el-button @click.native.prevent="toItem(scope.row.apiId)" type="text" size="small">
               查看详情
             </el-button>
-            <!-- <el-button @click.native.prevent="toTest(scope.row.apiId)" type="text" size="small">
+            <el-button @click.native.prevent="openDialog(scope.row.apiId)" type="text" size="small">
               调用API
-            </el-button> -->
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,12 +50,33 @@
         </div>
       </div>
     </div>
+    <el-dialog title="调用API" :visible.sync="dialogShow" width="40%" custom-class="dialog-custom">
+      <el-form label-width="100px">
+        <el-form-item label="apiId">
+          <el-input v-model="id" :disabled="true">
+            <el-button slot="append" @click="toTest" style="background: #409EFF;color:#fff;border-radius:0px;">调用API</el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="参数">
+          <el-input v-model="params" type="textarea" :rows="5">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="调用结果">
+          <div v-html="invokeResult" :style="dialogHeight" style="overflow-y:auto;background: #f2f2f2;margin: 10px 0;padding:10px;text-align:left;">
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogShow = false">关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import baseApi from '../../api/base';
 import menu from '../../utils/menu';
+import JSONfmatter from '../../utils/JSONfmatter';
 
 export default {
   created() {
@@ -67,8 +88,17 @@ export default {
   mounted() {
     this.dataList();
   },
+  computed: {
+    dialogHeight() {
+      return `height: ${window.innerHeight - 580}px; overflow-y: auto;`;
+    },
+  },
   data() {
     return {
+      invokeResult: '', // 返回结果
+      id: '',
+      params: '', // 传参
+      dialogShow: false, // 弹框
       tableHeight: 0, // 表格高度
       loading: false,
       searchVal: null,
@@ -113,13 +143,21 @@ export default {
     toItem(id) {
       this.$router.push({ path: '/ApiList/Item', query: { id } });
     },
-    toTest(id) {
-      baseApi.routeTest(id).then((res) => {
+    openDialog(id) {
+      this.id = id;
+      this.params = '';
+      this.invokeResult = '';
+      this.dialogShow = true;
+    },
+    toTest() {
+      baseApi.routeTest(this.id, this.params).then((res) => {
         if (res.data.code === '0') {
           this.$message({
             message: '调用成功',
             type: 'success',
           });
+          this.invokeResult = JSONfmatter(res.data.data);
+          // this.dialogShow = false;
         }
       });
     },
@@ -194,4 +232,20 @@ ul {
   color: white;
 }
 </style>
-
+<style>
+.el-input.is-disabled .el-input__inner {
+  color: #585858;
+}
+.el-dialog__body {
+  padding: 0px 30px;
+}
+.dialog-custom .el-form-item {
+  width: 90%;
+}
+.dialog-custom .el-form-item:last-child {
+  margin-bottom:5px;
+}
+.el-input-group__append{
+  border-radius:0px;
+}
+</style>
