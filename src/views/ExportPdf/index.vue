@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <p class="cardList_title">外部数据API列表</p>
+  <div id="pdfDom">
     <div class="cardList_body">
-      <ul>
-        <li class="cardList_body_list" v-for="(item, index) in typeArr" :key="index" @click="changeType(index)" :class="{ 'cardList_body_list_avtive': index === typeActive }">{{item}}</li>
-      </ul>
       <div class="middle">
         <div class="middle-search">
           <el-input placeholder="请输入数据源名称进行查找（支持模糊查询）" v-model="searchVal">
@@ -12,7 +8,7 @@
           </el-input>
         </div>
         <div class="middle-btn">
-          <el-button type="primary" @click="toCreatePage">创建API</el-button>
+          <el-button type="primary" @click="outPdf">导出PDF</el-button>
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg">
@@ -52,6 +48,10 @@
 </template>
 
 <script>
+// 导出页面为PDF格式
+import html2Canvas from 'html2canvas';
+import JsPDF from 'jspdf';
+
 export default {
   data() {
     const item = {
@@ -68,8 +68,7 @@ export default {
       searchVal: null,
       currentPage: 1,
       tableData: Array(5).fill(item),
-      typeArr: ['工商数据', '司法数据', '经营数据', '税务数据', '企业年报', '项目信息', '知识产权', '招投标（采购）', '税务数据', '业务流水', '征信数据', '其他数据'],
-      typeActive: 0,
+      htmlTitle: '我是PDF',
     };
   },
   methods: {
@@ -86,15 +85,6 @@ export default {
       this.centerDialogVisible = true;
       console.log(index, data);
     },
-    // 点击数据类型
-    changeType(index) {
-      this.typeActive = index;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      console.log(index);
-    },
     // 点击搜索
     toSearch() {
       this.loading = true;
@@ -103,9 +93,34 @@ export default {
       }, 500);
       console.log(this.searchVal);
     },
-    // 创建API
-    toCreatePage() {
-      this.$router.push({ path: '/CreateOne' });
+    outPdf() {
+      console.log('导出Pdf');
+      html2Canvas(document.querySelector('#pdfDom'), {
+        allowTaint: true,
+      }).then((canvas) => {
+        const contentWidth = canvas.width;
+        const contentHeight = canvas.height;
+        const pageHeight = contentWidth / 592.28 * 841.89;
+        let leftHeight = contentHeight;
+        let position = 0;
+        const imgWidth = 595.28;
+        const imgHeight = 592.28 / contentWidth * contentHeight;
+        const pageData = canvas.toDataURL('image/jpeg', 1.0);
+        const PDF = new JsPDF('', 'pt', 'a4');
+        if (leftHeight < pageHeight) {
+          PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
+        } else {
+          while (leftHeight > 0) {
+            PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight);
+            leftHeight -= pageHeight;
+            position -= 841.89;
+            if (leftHeight > 0) {
+              PDF.addPage();
+            }
+          }
+        }
+        PDF.save(`${this.htmlTitle}.pdf`);
+      });
     },
   },
 };

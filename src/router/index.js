@@ -1,12 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ApiList from '@/views/ApiList';
-import CreateOne from '@/views/ApiList/CreateOne';
-import CreateTwo from '@/views/ApiList/CreateTwo';
-import CreateThree from '@/views/ApiList/CreateThree';
-import CreateFour from '@/views/ApiList/CreateFour';
-import Account from '@/views/Account';
-import Charging from '@/views/Charging';
+import ExportPdf from '@/views/ExportPdf';
+import ExportExcel from '@/views/ExportExcel';
+import UploadExcel from '@/views/UploadExcel';
 
 Vue.use(Router);
 
@@ -18,39 +14,19 @@ export default new Router({
       redirect: '/ApiList',
     },
     {
-      path: '/ApiList',
-      name: 'ApiList',
-      component: ApiList,
+      path: '/ExportPdf',
+      name: '导出PDF',
+      component: ExportPdf,
     },
     {
-      path: '/CreateOne',
-      name: 'CreateOne',
-      component: CreateOne,
+      path: '/ExportExcel',
+      name: '导出',
+      component: ExportExcel,
     },
     {
-      path: '/CreateTwo',
-      name: 'CreateTwo',
-      component: CreateTwo,
-    },
-    {
-      path: '/CreateThree',
-      name: 'CreateThree',
-      component: CreateThree,
-    },
-    {
-      path: '/CreateFour',
-      name: 'CreateFour',
-      component: CreateFour,
-    },
-    {
-      path: '/Account',
-      name: 'Account',
-      component: Account,
-    },
-    {
-      path: '/Charging',
-      name: 'Charging',
-      component: Charging,
+      path: '/UploadExcel',
+      name: '导入',
+      component: UploadExcel,
     },
   ],
 });
