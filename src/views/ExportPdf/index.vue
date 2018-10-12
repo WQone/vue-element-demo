@@ -53,6 +53,10 @@ import html2Canvas from 'html2canvas';
 import JsPDF from 'jspdf';
 
 export default {
+  mounted() {
+    console.log(1);
+    this.test();
+  },
   data() {
     const item = {
       date: '2016-05-02',
@@ -72,6 +76,13 @@ export default {
     };
   },
   methods: {
+    async test() {
+      await this.value();
+      console.log(12);
+    },
+    value() {
+      console.log(11);
+    },
     // 当前页改变
     CurrentChange(val) {
       this.loading = true;
