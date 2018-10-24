@@ -3,12 +3,16 @@ node_js: stable
 branches:
   only:
     - master
-script:
+install:
   - npm install
+before_script:
+  - git clone --branch gh-pages https://${GH_REF} dist
+script:
   - npm run build
 after_success:
-  - cd dist
-  - git init
+  - ls -a
+  - cd ./dist
+  - ls -a
   - git add --all .
   - git commit --message "Automatically update from travis-ci"
   - git push --quiet --force  "https://${GH_TOKEN}@${GH_REF}" gh-pages:gh-pages
