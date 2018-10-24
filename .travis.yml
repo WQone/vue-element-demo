@@ -1,0 +1,15 @@
+language: node_js
+node_js: stable
+branches:
+  only:
+    - master
+script: npm build
+after_success:
+  # - npm run build
+  - cd dist
+  - git add --all .
+  - git commit --message "Automatically update from travis-ci"
+  - git push --quiet --force  "https://${GH_TOKEN}@${GH_REF}" gh-pages:gh-pages
+env:
+  global:
+    - GH_REF: github.com/WQone/vue-element-demo.git

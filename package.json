@@ -9,7 +9,7 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js && npm run deploy",
-    "deploy": "gh-pages -d dist -b gh-pages"
+    // "deploy": "gh-pages -d dist -b gh-pages"
   },
   "keywords": [
     "vue",
