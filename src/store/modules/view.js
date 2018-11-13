@@ -5,7 +5,7 @@ const getters = {};
 
 // mutations
 const mutations = {
-  ClearForm(state) {},
+  ClearForm() {},
 };
 
 const actions = {

@@ -1,7 +1,7 @@
 // 菜单
 const menuLists = [
   {
-    name: 'PDF',
+    name: '导出PDF',
     url: '/ExportPdf',
   },
   {

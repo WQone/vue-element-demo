@@ -5,7 +5,7 @@
  * @param {string} productionSourceMap 是否构建map文件
  */
 module.exports = {
-  baseUrl: './',
+  baseUrl: process.env.NODE_ENV === 'production' ? '/vue-element-demo/' : '/',
   outputDir: 'dist',
   assetsDir: 'static',
   productionSourceMap: false,
