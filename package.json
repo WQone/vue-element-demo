@@ -20,6 +20,7 @@
     "file-saver": "^1.3.8",
     "html2canvas": "^1.0.0-alpha.12",
     "jspdf": "^1.4.1",
+    "viewerjs": "^1.3.0",
     "vue": "^2.5.2",
     "vue-bus": "^1.1.0",
     "vue-router": "^3.0.1",
