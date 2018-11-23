@@ -12,6 +12,14 @@ const menuLists = [
     name: '导出',
     url: '/ExportExcel',
   },
+  {
+    name: '文件测试',
+    url: '/ShowPdf',
+  },
+  {
+    name: '简化',
+    url: '/Test',
+  },
 ];
 
 export default {

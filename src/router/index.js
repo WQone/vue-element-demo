@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import ExportPdf from '@/views/ExportPdf';
 import ExportExcel from '@/views/ExportExcel';
 import UploadExcel from '@/views/UploadExcel';
+import ShowPdf from '@/views/ShowPdf';
+import Test from '@/views/Test';
 
 Vue.use(Router);
 
@@ -29,6 +31,16 @@ export default new Router({
       path: '/UploadExcel',
       name: '导入',
       component: UploadExcel,
+    },
+    {
+      path: '/ShowPdf',
+      name: '文件测试',
+      component: ShowPdf,
+    },
+    {
+      path: '/Test',
+      name: 'Test',
+      component: Test,
     },
   ],
 });

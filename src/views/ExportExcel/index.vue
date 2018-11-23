@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div>{{page}}
     <div class="cardList_body">
       <div class="middle">
         <div class="middle-search">
@@ -12,6 +12,11 @@
         </div>
       </div>
       <el-table :data="tableData" style="width: 100%;margin: 10px 0;" border fit v-loading="loading" element-loading-text="拼命加载中" header-cell-class-name="tb-bg" id="out-table">
+        <el-table-column prop="name" label="序号" header-align="center">
+          <template slot-scope="scope">
+            {{(page -1)*size+scope.$index + 1}}
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="厂商" header-align="center">
         </el-table-column>
         <el-table-column prop="date" label="API名称" header-align="center">
@@ -33,9 +38,10 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination @current-change="CurrentChange" :current-page.sync="currentPage" :page-size="10" layout="total, prev, pager, next" :total="1000">
+        <el-pagination @current-change="CurrentChange" :current-page.sync="page" :page-size="size" layout="total, prev, pager, next" :total="1000">
         </el-pagination>
       </div>
+
     </div>
   </div>
 </template>
@@ -57,7 +63,8 @@ export default {
     return {
       loading: false,
       searchVal: null,
-      currentPage: 1,
+      page: 1,
+      size: 5,
       tableData: Array(5).fill(item),
       typeArr: [
         '工商数据',
@@ -80,6 +87,7 @@ export default {
   methods: {
     // 当前页改变
     CurrentChange(val) {
+      this.page = val;
       this.loading = true;
       setTimeout(() => {
         this.loading = false;

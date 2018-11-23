@@ -32,6 +32,8 @@ module.exports = {
     'no-unused-vars': 0,
     'arrow-parens': ['error', 'always'],
     'no-mixed-operators': 'off',
+    'prefer-destructuring': ['error', { object: false, array: false }],
+    'no-await-in-loop': 'off', // 禁止将 await 写在循环里，因为这样就无法同时发送多个异步请求了
     'max-len': [
       'error',
       {
