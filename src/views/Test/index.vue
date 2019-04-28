@@ -110,6 +110,8 @@ export default {
     pageChange(val) {
       console.log(this.page);
     },
+    dataUpdate() {},
+    dataDelete() {},
   },
 };
 </script>
