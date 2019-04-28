@@ -14,13 +14,13 @@ module.exports = {
       '/api': {
         target: 'https://www.baidu.com/',
         ws: true,
-        changeOrigin: true
+        changeOrigin: true,
       },
     }, // api代理
     overlay: {
       warnings: true,
-      errors: true
-    } // 浏览器 overlay 同时显示警告和错误：
+      errors: true,
+    }, // 浏览器 overlay 同时显示警告和错误：
   },
   // lintOnSave: 'error', // lint 错误在开发时直接显示在浏览器中
 };

@@ -1,9 +1,7 @@
 <template>
   <div>
-    <TableMain :columns="columns" :page.sync="page" :size="size" :tableData="tableData" :total="total" @update:page="pageChange" apiPath="pageItem">
-      <template v-slot:wu="{row, column, index}">
-        <span>{{index}}{{row.url}}</span>
-      </template>
+    <TableMain :columns="columns" :page.sync="page" :size="size" :tableData="tableData" :total="total" @update:page="pageChange">
+      <template  v-slot:wu="{row, column, index}"><span>{{index}}{{row}}{{column}}</span></template>
       <template v-slot:qian>sss</template>
     </TableMain>
   </div>
@@ -21,8 +19,9 @@ export default {
       columns: [
         {
           label: '授权网站',
-          prop: 'word',
+          prop: 'webSite',
           render: (h, params) => {
+            console.log(h, params);
             const ret = h(
               'el-button',
               {
@@ -36,7 +35,7 @@ export default {
                   },
                 },
               },
-              params.row.word,
+              params.row.webSite,
             );
             return ret;
           },
@@ -46,20 +45,17 @@ export default {
           prop: 'name',
         },
         {
-          label: '日期',
-          prop: 'datetime',
+          label: '密码',
+          prop: 'password',
         },
         {
           label: '年龄',
           prop: 'age',
         },
         {
-          label: '年龄',
-          slot: 'wu',
-        },
-        {
-          label: '年龄',
-          slot: 'qian',
+          label: '备注说明',
+          prop: 'remark',
+          tooltip: true,
         },
         {
           label: '操作',
@@ -98,6 +94,14 @@ export default {
             ]);
             return ret;
           },
+        },
+        {
+          label: '年龄',
+          slot: 'wu',
+        },
+        {
+          label: '年龄',
+          slot: 'qian',
         },
       ],
       tableData: [{ name: 1, age: 2 }, { name: 6, age: 7 }],

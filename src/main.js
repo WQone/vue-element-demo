@@ -6,8 +6,12 @@ import App from './App';
 import router from './router';
 import store from './store';
 import './registerServiceWorker';
+import api from './api/auth';
+import mockjsInit from './api/mock'; // 添加mockjs拦截请求，模拟返回服务器数据
 
+mockjsInit();
 Vue.config.productionTip = false;
+Vue.prototype.$api = api;
 
 new Vue({
   router,

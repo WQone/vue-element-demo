@@ -5,6 +5,8 @@ import ExportExcel from '@/views/ExportExcel';
 import UploadExcel from '@/views/UploadExcel';
 import ShowPdf from '@/views/ShowPdf';
 import Test from '@/views/Test';
+import UploadPdf from '@/views/UploadPdf';
+import Car from '@/views/Car';
 
 Vue.use(Router);
 
@@ -15,7 +17,12 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      redirect: '/ExportPdf',
+      redirect: '/Car',
+    },
+    {
+      path: '/Car',
+      name: '汽车',
+      component: Car,
     },
     {
       path: '/ExportPdf',
@@ -41,6 +48,11 @@ export default new Router({
       path: '/Test',
       name: 'Test',
       component: Test,
+    },
+    {
+      path: '/UploadPdf',
+      name: 'UploadPdf',
+      component: UploadPdf,
     },
   ],
 });

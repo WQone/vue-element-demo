@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input id="excel-upload-input" ref="excel-upload-input" type="file" accept=".xlsx, .xls" @change="handleClick">
+    <input id="excel-upload-input" ref="excel-upload-input" type="file" accept=".xlsx, .xls, .pdf" @change="handleClick">
     <div id="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
       Drop excel file here or
       <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">导入</el-button>
@@ -62,6 +62,14 @@ export default {
     handleClick(e) {
       const files = e.target.files;
       const rawFile = files[0]; // only use files[0]
+      console.log(rawFile, 'rawFile');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataBase64 = e.target.result; // result是你读取到的文件内容，此属性读取完成才能使用
+        const videoNum = dataBase64.split(';base64,'); //base64文件内容
+        console.log(dataBase64, videoNum);
+      };
+      reader.readAsDataURL(rawFile);
       if (!rawFile) return;
       this.upload(rawFile);
     },
