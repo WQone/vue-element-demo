@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Layout from '@/views/Layout';
 import ExportPdf from '@/views/ExportPdf';
 import ExportExcel from '@/views/ExportExcel';
 import UploadExcel from '@/views/UploadExcel';
@@ -7,22 +8,19 @@ import ShowPdf from '@/views/ShowPdf';
 import Test from '@/views/Test';
 import UploadPdf from '@/views/UploadPdf';
 import Car from '@/views/Car';
+import TestItem from '@/views/Test/Item';
 
 Vue.use(Router);
 
-export default new Router({
-  // mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      redirect: '/Car',
-    },
+const staticRoutes = {
+  path: '/',
+  component: Layout,
+  children: [
     {
       path: '/Car',
       name: '汽车',
       component: Car,
+      meta: { title: '汽车' },
     },
     {
       path: '/ExportPdf',
@@ -45,14 +43,49 @@ export default new Router({
       component: ShowPdf,
     },
     {
-      path: '/Test',
-      name: 'Test',
-      component: Test,
-    },
-    {
       path: '/UploadPdf',
       name: 'UploadPdf',
       component: UploadPdf,
+    },
+  ],
+};
+
+export default new Router({
+  // mode: 'history',
+  base: process.env.BASE_URL,
+  routes: [
+    staticRoutes,
+    {
+      path: '',
+      component: Layout,
+      redirect: 'Car',
+      children: [
+        {
+          path: 'Car',
+          component: Car,
+          name: 'Car',
+          meta: { title: 'Car' },
+        },
+      ],
+    },
+    {
+      path: '/Test',
+      component: Layout,
+      redirect: '/Test/index',
+      meta: { title: 'Test' },
+      children: [
+        {
+          path: 'index',
+          component: Test,
+          name: 'Test',
+        },
+        {
+          path: 'Item/:id',
+          component: TestItem,
+          name: 'TestItem',
+          meta: { title: 'TestItem' },
+        },
+      ],
     },
   ],
 });

@@ -22,13 +22,12 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getURL" type="primary">获取链接</el-button>
-        <el-button>展示链接</el-button>
       </el-form-item>
       <el-form-item label="链接">
         <span v-text="url"></span>
       </el-form-item>
     </el-form>
-    <iframe src="https://www.baidu.com/"></iframe>
+    <iframe :src="url"></iframe>
   </div>
 </template>
 
@@ -53,6 +52,6 @@ export default {
 <style lang="scss" scoped>
 iframe {
   width: 100%;
-  height: 350px;
+  height: 500px;
 }
 </style>

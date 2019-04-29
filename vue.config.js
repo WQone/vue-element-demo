@@ -5,11 +5,13 @@
  * @param {string} productionSourceMap 是否构建map文件
  */
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   outputDir: 'dist',
   assetsDir: 'static',
   productionSourceMap: false,
   devServer: {
+    host: '0.0.0.0',
+    port: 80,
     proxy: {
       '/api': {
         target: 'https://www.baidu.com/',

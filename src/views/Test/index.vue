@@ -89,11 +89,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.dataDelete(params.row);
+                      this.goItem(params.row);
                     },
                   },
                 },
-                '删除',
+                '详情',
               ),
             ]);
             return ret;
@@ -111,7 +111,9 @@ export default {
       console.log(this.page);
     },
     dataUpdate() {},
-    dataDelete() {},
+    goItem(row) {
+      this.$router.push({ name: 'TestItem', params: { id: row.id } });
+    },
   },
 };
 </script>
