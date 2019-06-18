@@ -9,6 +9,7 @@ import Test from '@/views/Test';
 import UploadPdf from '@/views/UploadPdf';
 import Car from '@/views/Car';
 import TestItem from '@/views/Test/Item';
+import BigData from '@/views/BigData';
 
 Vue.use(Router);
 
@@ -54,6 +55,11 @@ export default new Router({
   // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/BigData',
+      name: 'BigData',
+      component: BigData,
+    },
     staticRoutes,
     {
       path: '',
