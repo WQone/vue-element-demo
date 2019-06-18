@@ -40,54 +40,42 @@ const mapOption = {
   },
   tooltip: {
     show: true,
-    // formatter: (params) => `${params.name}：${params.data.value}%`,
+    formatter: (params) => `${params.name}：${params.value}`,
   },
-  visualMap: [
-    {
-      show: true,
-      min: 0,
-      max: 200,
-      left: 'left',
-      top: 'bottom',
-      text: ['高', '低'], // 文本，默认为数值文本
-      calculable: true,
-      seriesIndex: [1],
-      inRange: {
-        color: ['#00467F', '#A5CC82'], // 蓝绿
-      },
+  visualMap: {
+    show: true,
+    min: 0,
+    max: 200,
+    left: 'left',
+    top: 'bottom',
+    text: ['高', '低'], // 文本，默认为数值文本
+    realtime: false,
+    calculable: true,
+    inRange: {
+      color: ['#00467F', '#A5CC82'], // 蓝绿
     },
-  ],
+  },
   series: [
     {
       type: 'map',
-      mapType: '青海市',
-      label: {
+      map: '青海市',
+      selectedMode: 'single',
+      itemStyle: {
         normal: {
-          show: true,
-          textStyle: {
-            color: '#fff',
+          areaColor: '#031525',
+          borderColor: '#3B5077',
+          label: {
+            show: true,
           },
         },
         emphasis: {
-          textStyle: {
-            color: '#000',
+          areaColor: '#2B91B7',
+          label: {
+            show: true,
           },
         },
       },
       roam: true,
-      itemStyle: {
-        normal: {
-          areaColor: 'rgba(58, 95, 158, 1)',
-          // borderColor: 'transparent',
-          borderColor: 'rgba(147, 235, 248, 1)',
-          borderWidth: 1,
-        },
-        emphasis: {
-          areaColor: '#389BB7',
-          borderWidth: 0,
-        },
-      },
-      animation: false,
     },
   ],
 };
@@ -100,16 +88,12 @@ const setMapOption = (data) => {
 
     series.push({
       ...item,
-      data: convertData(data),
+      data,
     });
   }
 
   const ret = {
     ...mapOption,
-    visualMap: mapOption.visualMap.map((item, index) => ({
-      ...item,
-      max: getMax(data[index]),
-    })),
     series,
   };
   console.log(ret);

@@ -28,7 +28,18 @@ export default {
   },
   methods: {
     getChart() {
-      this.mapChart.setOption(options.setMapOption([{ name: '玉树藏族自治州', value: 12 }]));
+      this.mapChart.setOption(
+        options.setMapOption([
+          { name: '玉树藏族自治州', value: 122 },
+          { name: '海东市', value: 102 },
+          { name: '海南藏族自治州', value: 82 },
+          { name: '黄南藏族自治州', value: 62 },
+          { name: '西宁市', value: 58 },
+          { name: '果洛藏族自治州', value: 112 },
+          { name: '海北藏族自治州', value: 200 },
+          { name: '海西蒙古族藏族自治州', value: 50 },
+        ]),
+      );
     },
   },
 };
