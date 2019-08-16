@@ -28,6 +28,10 @@ const menuLists = [
     name: '上传PDF',
     url: '/UploadPdf',
   },
+  {
+    name: '滚动',
+    url: '/Scroll',
+  },
 ];
 
 export default {

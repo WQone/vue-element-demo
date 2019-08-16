@@ -10,6 +10,7 @@ import UploadPdf from '@/views/UploadPdf';
 import Car from '@/views/Car';
 import TestItem from '@/views/Test/Item';
 import BigData from '@/views/BigData';
+import Scroll from '@/views/Scroll';
 
 Vue.use(Router);
 
@@ -47,6 +48,11 @@ const staticRoutes = {
       path: '/UploadPdf',
       name: 'UploadPdf',
       component: UploadPdf,
+    },
+    {
+      path: '/Scroll',
+      name: 'Scroll',
+      component: Scroll,
     },
   ],
 };
