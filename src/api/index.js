@@ -7,23 +7,30 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'www.baidu.com',
+  baseURL: `${window.location.protocol}//${window.location.host}/api/`,
   withCredentials: true,
-  params: {
-    access_token: 'abcdefg',
-  },
+  params: {},
+  timeout: 25000, // 请求超时时间
 });
 
-instance.interceptors.request.use((request) => {
-  const axiosRequest = {
-    ...request,
-    params: {
-      ...request.params,
-      access_token: 'abcdefg',
-    },
-  };
-  return axiosRequest;
-});
+instance.interceptors.request.use(
+  (request) => {
+    const axiosRequest = {
+      ...request,
+      params: {
+        ...request.params,
+      },
+      responseType: request.responseType,
+      headers: {
+        Pragma: 'no-cache',
+        'Cache-Control': 'no-cache',
+        ...request.headers,
+      },
+    };
+    return axiosRequest;
+  },
+  (error) => Promise.reject(error),
+);
 
 instance.interceptors.response.use(
   (response) => {

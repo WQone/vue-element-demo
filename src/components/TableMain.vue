@@ -1,6 +1,9 @@
 <template>
   <div>
     <el-table :border="border" :data="tableData" style="width: 100%" v-loading="loading">
+      <el-table-column label="#" width="80">
+        <template slot-scope="scope">{{(page - 1) * size + scope.$index + 1}}</template>
+      </el-table-column>
       <el-table-column :key="index" :label="column.label" :min-width="column.width" :prop="column.prop" :show-overflow-tooltip="column.tooltip" v-for="(column, index) in columns">
         <template slot-scope="scope">
           <MyRender :render="column.render" :row="scope.row" v-if="column.render"></MyRender>
@@ -23,16 +26,13 @@ export default {
     MyRender,
   },
   mounted() {
-    this.getlist();
+    this.apiFun(this.page, this.size);
   },
   computed: {},
   data() {
     return {
-      loading: true,
       page: 1,
-      total: 0,
       size: 10,
-      tableData: [],
     };
   },
   props: {
@@ -43,12 +43,12 @@ export default {
       },
     },
     // 接口数据
-    // tableData: {
-    //   type: [Array],
-    //   default() {
-    //     return [];
-    //   },
-    // },
+    tableData: {
+      type: [Array],
+      default() {
+        return [];
+      },
+    },
     // 表格
     columns: {
       type: [Array],
@@ -60,6 +60,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     // page: {
     //   type: Number,
     //   default: 1,
@@ -68,36 +72,26 @@ export default {
     //   type: Number,
     //   default: 10,
     // },
-    // total: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    apiPath: {
-      type: String,
-      default: '',
+    total: {
+      type: Number,
+      default: 0,
+    },
+    apiFun: {
+      type: Function,
+      default: null,
     },
   },
   methods: {
-    getlist() {
-      this.loading = true;
-      console.log(this.page, this.size);
-      this.$api[this.apiPath]().then((res) => {
-        const data = res.data.data;
-        this.tableData = data.content2;
-        this.total = data.content.length;
-        this.loading = false;
-      });
-    },
     // 条目数切换
     sizeChange(size) {
       this.page = 1;
       this.size = size;
-      this.getlist();
+      this.apiFun(this.page, this.size);
     },
     // 页码切换
     pageChange(val) {
       this.page = val;
-      this.getlist();
+      this.apiFun(this.page, this.size);
     },
   },
 };

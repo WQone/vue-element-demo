@@ -2,7 +2,7 @@
   <div id="app">
     <el-container style="height: 100%;">
       <el-header class="header" style>
-        <img src="../../assets/logo.png">
+        <img src="../../assets/logo.png" />
         <span>比一比API数据DEMO</span>
       </el-header>
       <el-container>
@@ -12,16 +12,16 @@
               <template slot="title">
                 <i class="el-icon-setting"></i>玩玩玩玩
               </template>
-              <el-menu-item :class="{ 'is-active': item.url === $route.path }" :index="item.name" :key="index" @click="linkPage(item.url)" v-for="(item, index) in menuList">{{item.name}}</el-menu-item>
+              <el-menu-item :class="{ 'is-active': item.path === $route.path }" :index="item.name" :key="index" @click="linkPage(item.path)" v-for="(item, index) in menuList">{{item.name}}</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>
         <el-main class="main-body">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :key="index" v-for="(item, index) in breadcrumbList">{{item.meta.title}}</el-breadcrumb-item>
+            <el-breadcrumb-item :key="index" v-for="(item, index) in breadcrumbList">{{item.name}}</el-breadcrumb-item>
           </el-breadcrumb>
           <p class="cardList_title">{{$route.name}}</p>
-          <router-view/>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -29,14 +29,14 @@
 </template>
 
 <script>
-import menu from '../../utils/menu';
+import { staticRoutes } from '../../router/index';
 
 export default {
   name: 'App',
   data() {
     return {
       breadcrumbList: [],
-      menuList: menu.menuLists,
+      menuList: staticRoutes,
     };
   },
   watch: {
@@ -49,12 +49,10 @@ export default {
       this.$router.push(path);
     },
     getBreadcrumb() {
-      let matched = this.$route.matched.filter((item) => item.meta && item.meta.title);
+      let matched = this.$route.matched.filter((item) => item.name);
       const first = matched[0];
-      matched = [{ path: '/', meta: { title: '首页' } }].concat(matched);
-      this.breadcrumbList = matched.filter(
-        (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false,
-      );
+      matched = [{ path: '/', name: '首页' }].concat(matched);
+      this.breadcrumbList = matched.filter((item) => item.name);
       console.log(this.$route.matched, this.$route, this.breadcrumbList);
     },
   },

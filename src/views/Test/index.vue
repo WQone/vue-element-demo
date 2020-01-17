@@ -1,15 +1,15 @@
 <template>
   <div>
-    <TableMain :columns="columns" :page.sync="page" :size="size" :tableData="tableData" :total="total" @update:page="pageChange" apiPath="pageItem">
-      <template v-slot:wu="{row, column, index}">
-        <span>{{index}}{{row.url}}</span>
+    <TableMain :apiFun="getlist" :columns="columns" :loading="loading" :tableData="tableData" :total="total">
+      <template v-slot:star_name="{row, column, index}">
+        <span>{{row.star_name}}</span>
       </template>
-      <template v-slot:qian>sss</template>
     </TableMain>
   </div>
 </template>
 
 <script>
+import starApi from '../../api/star';
 import TableMain from '../../components/TableMain';
 
 export default {
@@ -20,8 +20,9 @@ export default {
     return {
       columns: [
         {
-          label: '授权网站',
-          prop: 'word',
+          label: '网址',
+          prop: 'url',
+          width: 110,
           render: (h, params) => {
             const ret = h(
               'el-button',
@@ -31,56 +32,48 @@ export default {
                 },
                 on: {
                   click: () => {
-                    console.log(params.row);
-                    this.dataUpdate(params.row);
+                    window.open(params.row.url);
                   },
                 },
               },
-              params.row.word,
+              params.row.url,
             );
             return ret;
           },
         },
         {
-          label: '账号',
-          prop: 'name',
+          label: '星座名',
+          width: 60,
+          slot: 'star_name',
         },
         {
-          label: '日期',
-          prop: 'datetime',
+          label: '日期类型',
+          width: 60,
+          prop: 'day_type',
         },
         {
-          label: '年龄',
-          prop: 'age',
+          label: '运势类型',
+          width: 60,
+          prop: 'fortune_type',
         },
         {
-          label: '年龄',
-          slot: 'wu',
+          label: '描述',
+          width: 200,
+          prop: 'des_text',
         },
         {
-          label: '年龄',
-          slot: 'qian',
+          label: '创建日期',
+          prop: 'date',
+        },
+        {
+          label: '创建时间',
+          prop: 'creat_time',
         },
         {
           label: '操作',
-          prop: 'remark',
+          width: 40,
           render: (h, params) => {
             const ret = h('p', [
-              h(
-                'el-button',
-                {
-                  props: {
-                    type: 'text',
-                  },
-                  on: {
-                    click: () => {
-                      console.log(params.row);
-                      this.dataUpdate(params.row);
-                    },
-                  },
-                },
-                '修改',
-              ),
               h(
                 'el-button',
                 {
@@ -100,15 +93,24 @@ export default {
           },
         },
       ],
-      tableData: [{ name: 1, age: 2 }, { name: 6, age: 7 }],
-      page: 1,
-      size: 10,
-      total: 30,
+      tableData: [],
+      total: 0,
+      loading: false,
     };
   },
+  mounted() {
+    // this.getlist();
+  },
   methods: {
-    pageChange(val) {
-      console.log(this.page);
+    getlist(page, size) {
+      this.loading = true;
+      console.log(page, size);
+      starApi.star(page, size).then((res) => {
+        const data = res.data.result;
+        this.tableData = data.data;
+        this.total = data.total;
+        this.loading = false;
+      });
     },
     dataUpdate() {},
     goItem(row) {

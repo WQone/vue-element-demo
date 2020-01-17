@@ -7,97 +7,82 @@ import UploadExcel from '@/views/UploadExcel';
 import ShowPdf from '@/views/ShowPdf';
 import Test from '@/views/Test';
 import UploadPdf from '@/views/UploadPdf';
-import Car from '@/views/Car';
+import StopUp from '@/views/StopUp';
 import TestItem from '@/views/Test/Item';
 import BigData from '@/views/BigData';
 import Scroll from '@/views/Scroll';
 
 Vue.use(Router);
 
-const staticRoutes = {
-  path: '/',
-  component: Layout,
-  children: [
-    {
-      path: '/Car',
-      name: '汽车',
-      component: Car,
-      meta: { title: '汽车' },
-    },
-    {
-      path: '/ExportPdf',
-      name: '导出PDF',
-      component: ExportPdf,
-    },
-    {
-      path: '/ExportExcel',
-      name: '导出',
-      component: ExportExcel,
-    },
-    {
-      path: '/UploadExcel',
-      name: '导入',
-      component: UploadExcel,
-    },
-    {
-      path: '/ShowPdf',
-      name: '文件测试',
-      component: ShowPdf,
-    },
-    {
-      path: '/UploadPdf',
-      name: 'UploadPdf',
-      component: UploadPdf,
-    },
-    {
-      path: '/Scroll',
-      name: 'Scroll',
-      component: Scroll,
-    },
-  ],
-};
+export const staticRoutes = [
+  {
+    path: '/Test',
+    component: () => import('@/views/Layout/Black'),
+    name: '简化',
+    redirect: '/Test/index',
+    children: [
+      {
+        path: 'index',
+        component: Test,
+      },
+      {
+        path: 'Item/:id',
+        component: TestItem,
+        name: 'TestItem',
+        meta: { title: 'TestItem' },
+      },
+    ],
+  },
+  {
+    path: '/ExportPdf',
+    name: '导出PDF',
+    component: ExportPdf,
+  },
+  {
+    path: '/ExportExcel',
+    name: '导出Excel',
+    component: ExportExcel,
+  },
+  {
+    path: '/UploadExcel',
+    name: '导入Excel',
+    component: UploadExcel,
+  },
+  {
+    path: '/ShowPdf',
+    name: '文件测试',
+    component: ShowPdf,
+  },
+  {
+    path: '/UploadPdf',
+    name: '上传PDF',
+    component: UploadPdf,
+  },
+  {
+    path: '/Scroll',
+    name: '滚动',
+    component: Scroll,
+  },
+  {
+    path: '/StopUp',
+    name: '断点上传',
+    component: StopUp,
+  },
+  {
+    path: '/BigData',
+    name: '大屏',
+    component: BigData,
+  },
+];
 
 export default new Router({
   // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/BigData',
-      name: 'BigData',
-      component: BigData,
-    },
-    staticRoutes,
-    {
-      path: '',
+      path: '/',
       component: Layout,
-      redirect: 'Car',
-      children: [
-        {
-          path: 'Car',
-          component: Car,
-          name: 'Car',
-          meta: { title: 'Car' },
-        },
-      ],
-    },
-    {
-      path: '/Test',
-      component: Layout,
-      redirect: '/Test/index',
-      meta: { title: 'Test' },
-      children: [
-        {
-          path: 'index',
-          component: Test,
-          name: 'Test',
-        },
-        {
-          path: 'Item/:id',
-          component: TestItem,
-          name: 'TestItem',
-          meta: { title: 'TestItem' },
-        },
-      ],
+      children: [...staticRoutes],
     },
   ],
 });

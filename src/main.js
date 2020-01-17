@@ -11,7 +11,6 @@ import mockjsInit from './api/mock'; // 添加mockjs拦截请求，模拟返回�
 
 mockjsInit();
 Vue.config.productionTip = false;
-Vue.prototype.$api = api;
 
 new Vue({
   router,
