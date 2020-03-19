@@ -9,7 +9,7 @@ import './registerServiceWorker';
 import api from './api/auth';
 import mockjsInit from './api/mock'; // 添加mockjs拦截请求，模拟返回服务器数据
 
-mockjsInit();
+// mockjsInit();
 Vue.config.productionTip = false;
 
 new Vue({

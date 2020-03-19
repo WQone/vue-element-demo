@@ -13,15 +13,26 @@ export default {
     UploadFileMain,
   },
   data() {
-    return {};
+    return {
+      fileInfo: null,
+    };
   },
   methods: {
-    uploadFile(file) {
-      console.log(77);
-      uploadApi.upload(file).then((res) => {
-        console.log(88, res);
-        console.log(file);
-      });
+    uploadFile(file, formData, fileInfo) {
+      console.log('触发上传', file);
+    //   this.fileInfo = fileInfo;
+    //   uploadApi.upload(formData).then((res) => {
+    //     // console.log(file);
+    //   });
+    },
+    margeAll() {
+    //   console.log('合并上传', 'name, total, hash');
+    //   const filename = this.fileInfo.filename;
+    //   const total = this.fileInfo.total;
+    //   const hash = this.fileInfo.hash;
+    //   uploadApi.mergeUpload({ filename, total, hash }).then((res) => {
+    //     // console.log(file);
+    //   });
     },
   },
 };

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { staticRoutes } from '../../router/index';
+import { staticRoutes } from '../../router/index'; // eslint-disable-line
 
 export default {
   name: 'App',

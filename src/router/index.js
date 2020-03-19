@@ -65,7 +65,7 @@ export const staticRoutes = [
   },
   {
     path: '/StopUp',
-    name: '断点上传',
+    name: '文件切片上传',
     component: StopUp,
   },
   {
