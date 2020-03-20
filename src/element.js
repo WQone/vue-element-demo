@@ -71,6 +71,14 @@ import {
 
 import convert from './utils/convert';
 
+// 组件注册
+const requireContext = require.context('./components/', false, /\.vue$/);
+
+requireContext.keys().forEach((key) => {
+  console.log('key', key, key.replace(/(\.\/|\.vue)/g, ''));
+  Vue.component(key.replace(/(\.\/|\.vue)/g, ''), requireContext(key).default);
+});
+
 Vue.prototype.convert = convert;
 
 Vue.use(Pagination);

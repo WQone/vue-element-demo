@@ -84,7 +84,9 @@ export default {
 
       return data;
     },
-    handleSpan({ row, column, rowIndex, columnIndex }) {
+    handleSpan({
+      row, column, rowIndex, columnIndex,
+    }) {
       //   if (rowIndex === 0 && columnIndex === 1) {
       //     return [3, 1];
       //   }
@@ -98,6 +100,7 @@ export default {
         // console.log(row.nameLen);
         return [row.keyLen, columnIndex];
       }
+      return true;
     },
   },
 };

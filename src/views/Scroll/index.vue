@@ -13,14 +13,8 @@
 </template>
 
 <script>
-import marqueeY from '../../components/marqueeY';
-import marqueeX from '../../components/marqueeX';
-
 export default {
-  components: {
-    marqueeY,
-    marqueeX,
-  },
+  components: {},
   mounted() {
     setInterval(() => {
       if (this.listLength * this.singleHeight <= this.transformY) {

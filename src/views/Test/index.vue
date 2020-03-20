@@ -10,12 +10,9 @@
 
 <script>
 import starApi from '../../api/star';
-import TableMain from '../../components/TableMain';
 
 export default {
-  components: {
-    TableMain,
-  },
+  components: {},
   data() {
     return {
       columns: [

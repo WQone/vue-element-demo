@@ -113,10 +113,7 @@ export default {
       for (let i = 0; i < this.message.length; i += 1) {
         let a = '';
         if (
-          this.input[i] !== '' ||
-          (typeof this.selectList[i] !== 'undefined' &&
-            this.selectList[i] !== '' &&
-            this.selectList[i].length)
+          this.input[i] !== '' || (typeof this.selectList[i] !== 'undefined' && this.selectList[i] !== '' && this.selectList[i].length)
         ) {
           // 下拉单选0
           if (this.message[i].type === 0) {
@@ -157,22 +154,16 @@ export default {
         // 验证必填
         let isTrue = true;
         if (
-          this.message[i].type !== 4 &&
-          this.message[i].type !== 5 &&
-          this.selectValue[this.message[i].key] !== 0 &&
-          !this.selectValue[this.message[i].key] &&
-          this.message[i].required
+          this.message[i].type !== 4 && this.message[i].type !== 5 && this.selectValue[this.message[i].key] !== 0 && !this.selectValue[this.message[i].key] && this.message[i].required
         ) {
           isTrue = false;
         }
         if (
-          (this.message[i].type === 4 || this.message[i].type === 5) &&
-          this.message[i].required
+          (this.message[i].type === 4 || this.message[i].type === 5) && this.message[i].required
         ) {
           for (let n = 0; n < this.message[i].key.length; n += 1) {
             if (
-              !this.selectValue[this.message[i].key[n]] &&
-              this.selectValue[this.message[i].key[n]] !== 0
+              !this.selectValue[this.message[i].key[n]] && this.selectValue[this.message[i].key[n]] !== 0
             ) {
               isTrue = false;
             }

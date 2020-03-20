@@ -36,7 +36,7 @@ export default {
         return false;
       },
     },
-    接口数据
+    // 接口数据
     tableData: {
       type: [Array],
       default() {
