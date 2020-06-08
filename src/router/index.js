@@ -11,6 +11,7 @@ import StopUp from '@/views/StopUp';
 import TestItem from '@/views/Test/Item';
 import BigData from '@/views/BigData';
 import Scroll from '@/views/Scroll';
+import UeditorCus from '@/views/UeditorCus';
 
 Vue.use(Router);
 
@@ -67,6 +68,11 @@ export const staticRoutes = [
     path: '/StopUp',
     name: '文件切片上传',
     component: StopUp,
+  },
+  {
+    path: '/UeditorCus',
+    name: '百度编辑器',
+    component: UeditorCus,
   },
   {
     path: '/BigData',
